@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/utils/colors.dart';
 
 final ThemeData foodApptheme = ThemeData(
-  fontFamily: 'Roboto',
   primaryColor: AppColors.bgprimaryColor,
   colorScheme:
       ColorScheme.fromSwatch().copyWith(secondary: AppColors.accentColor),
@@ -11,33 +10,48 @@ final ThemeData foodApptheme = ThemeData(
     foregroundColor: Colors.black,
   ),
   textTheme: TextTheme(
+    headline1: TextStyle(
+      color: AppColors.textPrimarycolor,
+      fontFamily: 'Roboto',
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+    ),
     // Regular
     bodyText1: TextStyle(
-        color: AppColors.textPrimarycolor, fontFamily: 'Roboto', fontSize: 50),
+      color: AppColors.textPrimarycolor,
+      fontFamily: 'Roboto',
+      fontSize: 16, // Adjust font size as needed
+      fontWeight: FontWeight.w400,
+    ),
 
     // Bold
     bodyText2: TextStyle(
-        color: AppColors.textSecondarycolor,
-        fontFamily: 'Roboto',
-        fontSize: 20,
-        fontWeight: FontWeight.w700),
+      color: AppColors.textPrimarycolor,
+      fontFamily: 'Roboto',
+      fontSize: 14, // Adjust font size as needed
+      fontWeight: FontWeight.w500,
+    ),
 
     // Italic
     subtitle1: TextStyle(
-        color: AppColors.textWhitecolor,
-        fontFamily: 'Roboto',
-        fontSize: 20,
-        fontStyle: FontStyle.italic),
+      color: AppColors.textWhitecolor,
+      fontFamily: 'Roboto',
+      fontSize: 12, // Adjust font size as needed
+      fontStyle: FontStyle.italic,
+    ),
 
     // Bold Italic
     subtitle2: TextStyle(
-        color: AppColors.textWhitecolor,
-        fontFamily: 'Roboto',
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.italic),
+      color: AppColors.textWhitecolor,
+      fontFamily: 'Roboto',
+      fontSize: 18, // Adjust font size as needed
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.italic,
+    ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: AppColors.bgprimaryColor,
+    ),
   ),
 );
