@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/widgets/ourbrandname.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -21,15 +22,20 @@ class HomePage extends StatelessWidget {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'WaraChow',
-            // ignore: deprecated_member_use
-            style: Theme.of(context).textTheme.bodyText1,
+          SizedBox(
+            height: 200,
+            width: double.infinity,
+            child: brandName(context),
           ),
           Text(
             'WaraChow',
             // ignore: deprecated_member_use
-            style: Theme.of(context).textTheme.bodyText2,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          Text(
+            'WaraChow',
+            // ignore: deprecated_member_use
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           Text(
             'WaraChow',
@@ -50,6 +56,8 @@ class HomePage extends StatelessWidget {
                 // context,
                 // MaterialPageRoute(builder: (context) => const FoodApp()),
                 // );
+
+                Navigator.pushNamed(context, '/signup');
               },
               child: const Text('Enter'),
             ),
