@@ -139,7 +139,7 @@ class _MySignupPageState extends State<MySignupPage> {
                     //   Navigator.pushNamed(context, '/signin');
                     // }),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
 

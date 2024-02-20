@@ -16,10 +16,20 @@ class HomePage extends StatelessWidget {
     // print(
     //     'Font Weight: ${style?.fontWeight}  ${style1?.fontWeight}  ${style2?.fontWeight}  ${style3?.fontWeight} ');
 
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 236, 230, 230),
-      body: Center(
-          child: Column(
+return Scaffold(
+  body: Container(
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Colors.white, // transparent white at the top
+          Colors.black, // black at the bottom
+        ],
+      ),
+    ),
+    child: Center(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
@@ -28,42 +38,52 @@ class HomePage extends StatelessWidget {
             child: brandName(context),
           ),
           Text(
-            'WaraChow',
+            'Welcome to WaraChow',
             // ignore: deprecated_member_use
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme.of(context).textTheme.headline3,
           ),
           Text(
-            'WaraChow',
+            '      Order the best meals in Kigali and ',
             // ignore: deprecated_member_use
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
           Text(
-            'WaraChow',
+            'have them delivered to your doorstep ',
             // ignore: deprecated_member_use
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
-          Text(
-            'WaraChow',
+          Text('in little or notime. Doesnt that sound ',
             // ignore: deprecated_member_use
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+          Text('         delicious? ',
+            // ignore: deprecated_member_use
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+          const SizedBox(
+            height: 20,
           ),
           SizedBox(
             height: 30,
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // Navigator.push(
-                // context,
-                // MaterialPageRoute(builder: (context) => const FoodApp()),
-                // );
-
-                Navigator.pushNamed(context, '/signup');
+                Navigator.pushNamed(context, '/');
               },
-              child: const Text('Enter'),
+              child: const Text('Enter',
+                // ignore: deprecated_member_use
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+              
+              ),
             ),
           ),
         ],
-      )),
-    );
+      ),
+    ),
+  ),
+);
   }
 }
