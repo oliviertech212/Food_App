@@ -44,7 +44,9 @@ class _LoginPageState extends State<LoginPage> {
                   maxLength: 8),
                 const SizedBox(height: 10),
                 TextButton(
-                  onPressed: () {}, 
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/forgot-password');
+                  }, 
                   child: Text('forgot password?',
                     style: TextStyle(
                       color: AppColors.textPrimarycolor,
