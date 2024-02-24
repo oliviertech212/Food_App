@@ -23,7 +23,7 @@ class FoodApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         '/home': (context) => const HomePage(),
-        '/': (context) => const LoginPage(),
+        '/login': (context) => const LoginPage(),
         '/signup': (context) => const MySignupPage(),
         '/forgot-password': (context) => ForgotPassword(),
         '/verification': (context) => const verification(),

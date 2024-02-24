@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/utils/colors.dart';
+import 'package:foodapp/widgets/ElevatedButton.dart';
 import 'package:foodapp/widgets/ourbrandname.dart';
 
-
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
+  const ForgotPassword({Key? key}) : super(key: key);
   static String id = 'forgot-password';
 
   @override
@@ -17,40 +17,73 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgprimaryColor.withOpacity(0.2),
-      body: Center(
-        child: Stack(
-          children: [
-            SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: brandName(context),
-            ),
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).primaryColor.withOpacity(0.2),
-                    Theme.of(context).primaryColor,
-                  ],
-                ),
+      backgroundColor: AppColors.bgprimaryColor,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  Colors.white,
+                  AppColors.bgprimaryColor,
+                ],
               ),
             ),
-            SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.only(top: 150),
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundWhite,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(20),
-                    bottom: Radius.circular(30),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.15,
+            left: 20,
+            right: 20,
+            child: Column(
+              children: [
+                brandName(context),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundWhite,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: AppColors.bgprimaryColor,
+                      width: 2,
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  // child: Column(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //   children: [
+                  //     const Text(
+                  //       'Forgot Password.',
+                  //       style: TextStyle(fontSize: 30, color: Colors.black),
+                  //       textAlign: TextAlign.center,
+                  //     ),
+                  //     const SizedBox(height: 20),
+                  //     TextFormField(
+                  //       controller: _usernameController,
+                  //       decoration: InputDecoration(
+                  //         labelText: "Enter your account email",
+                  //       ),
+                  //       keyboardType: TextInputType.emailAddress,
+                  //       textInputAction: TextInputAction.next,
+                  //     ),
+                  //     const SizedBox(height: 20),
+                  //     ElevatedButton(
+                  //       onPressed: () {
+                  //         Navigator.pushNamed(context, '/verification');
+                  //       },
+                  //       child: const Text(
+                  //         'Reset Password',
+                  //         style: TextStyle(
+                  //           color: Colors.white,
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -58,30 +91,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         'Forgot Password.',
                         style: TextStyle(fontSize: 30, color: Colors.black),
                       ),
+                      SizedBox(height: 20),
                       MyTextField(
-                  labelText: "Enter your account email",
-                  inputControl: _usernameController,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next),
+                          labelText: "Enter your account email",
+                          inputControl: _usernameController,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                        child: const Text('Reset Password',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                        ),
-                        onPressed: () {
+                      MyElevatedButton(
+                        context,
+                        50.0,
+                        'Reset Password',
+                        () {
                           Navigator.pushNamed(context, '/verification');
                         },
-                      ),
+                      )
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
-          ],),
-            ),
-          );
+          ),
+        ],
+      ),
+    );
   }
 }
