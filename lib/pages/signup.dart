@@ -16,7 +16,8 @@ class _MySignupPageState extends State<MySignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgprimaryColor.withOpacity(0.2),
+      backgroundColor: Theme.of(context).primaryColor,
+      // backgroundColor: AppColors.bgSecondary.withOpacity(0.2),
       body: Center(
         child: Stack(
           children: [
@@ -34,7 +35,12 @@ class _MySignupPageState extends State<MySignupPage> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Theme.of(context).primaryColor.withOpacity(0.1),
+                    // Theme.of(context).primaryColor.withOpacity(0.50),
+                    // Theme.of(context).primaryColor,
+
+                    // Theme.of(context).primaryColor.withOpacity(0.29),
+                    // Theme.of(context).primaryColor,
+                    Theme.of(context).primaryColorLight.withOpacity(0.1),
                     Theme.of(context).primaryColor,
                   ],
                 ),
