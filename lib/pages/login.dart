@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/widgets/ourbrandname.dart';
+import 'package:foodapp/widgets/ElevatedButton.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -73,19 +74,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColors.bgprimaryColor,
-                          ),
-                          child: Text(
-                            'Eat Away!',
-                            style: TextStyle(
-                              color: AppColors.textWhitecolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                         MyElevatedButton(
+                        context,
+                        50.0,
+                        'Eat Away!',
+                        () {
+                        },),
                         const SizedBox(height: 10),
                         Column(
                           children: <Widget>[
@@ -111,21 +105,13 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/signup');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColors.bgprimaryColor,
-                          ),
-                          child: Text(
-                            'sign up',
-                            style: TextStyle(
-                              color: AppColors.textWhitecolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                         MyElevatedButton(
+                        context,
+                        50.0,
+                        'sign up',
+                        () {
+                          Navigator.pushNamed(context, '/signup');
+                        },),
                       ],
                     ),
                   ),
