@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/widgets/ourbrandname.dart';
+import 'package:foodapp/widgets/ElevatedButton.dart';
 
 class NewPassword extends StatefulWidget {
   const NewPassword({Key? key}) : super(key: key);
@@ -73,19 +74,12 @@ class _NewPasswordState extends State<NewPassword> {
                           textInputAction: TextInputAction.next,
                           maxLength: 8),
                       const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          primary: AppColors.bgprimaryColor,
-                        ),
-                        child: Text(
-                          'Eat Away!',
-                          style: TextStyle(
-                            color: AppColors.textWhitecolor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                       MyElevatedButton(
+                        context,
+                        50.0,
+                        'Eat Away!',
+                        () {
+                        },),
                     ],
                   ),
                 ),
