@@ -64,8 +64,8 @@ class _MySignupPageState extends State<MySignupPage> {
                       color: AppColors.bgprimaryColor,
                       height: 50,
                       thickness: 5,
-                      indent: 200,
-                      endIndent: 200,
+                      indent: 150,
+                      endIndent: 150,
                     ),
 
                     const SizedBox(height: 12.0),
@@ -127,15 +127,15 @@ class _MySignupPageState extends State<MySignupPage> {
 
                     const SizedBox(height: 10.0),
 
-                    MyTextField(
-                        labelText: "ConfirmPassword",
-                        inputControl: _passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.next,
-                        maxLength: 8),
+                    // MyTextField(
+                    //     labelText: "ConfirmPassword",
+                    //     inputControl: _passwordController,
+                    //     obscureText: true,
+                    //     keyboardType: TextInputType.visiblePassword,
+                    //     textInputAction: TextInputAction.next,
+                    //     maxLength: 8),
 
-                    const SizedBox(height: 10.0),
+                    // const SizedBox(height: 10.0),
 
                     MyElevatedButton(context, 50.0, 'Never Hungry Again!', () {
                       // Navigator.pushNamed(context, '/signup');

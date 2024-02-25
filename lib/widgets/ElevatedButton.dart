@@ -4,7 +4,7 @@ import 'package:foodapp/utils/colors.dart';
 
 Widget MyElevatedButton(BuildContext context, height, text, click) {
   return SizedBox(
-      height: height,
+      height: height as double,
       // width: width,
       child: ElevatedButton(
         onPressed: () {
