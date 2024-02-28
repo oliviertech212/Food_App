@@ -4,6 +4,7 @@ import "package:sqflite/sqflite.dart";
 
 class UserDB {
   final tableName = 'userstable';
+
 // Future<int> insertUser(User user) async {
 //   final Database db = await DatabaseeService().database;
 //   return await db.insert(
@@ -54,6 +55,7 @@ class UserDB {
       return User(
         username: maps[i]['username'],
         email: maps[i]['email'],
+        id: maps[i]['id'],
         password: maps[i]['password'],
       );
     });

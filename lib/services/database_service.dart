@@ -6,6 +6,8 @@ import 'package:foodapp/services/users.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:foodapp/services/product_table.services.dart';
+import 'package:foodapp/models/products.model.dart';
 
 // Future databaseconnection() async {
 //   final database = openDatabase(
@@ -31,13 +33,42 @@ import 'package:sqflite/sqflite.dart';
 //   return database;
 // }
 
+var product1 = Product(
+    id: 1,
+    name: "Chicken Wrap",
+    description: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligula, at mollis enim pretium in.
+ Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis venenatis, quam iaculis faucibus blandit,
+sellus ut odio condimentum, elementum sem mollis, porta sapien. Aliquam at ante sed purus blandit volutpat. Vivamus ''',
+    price: 2000,
+    image:
+        "https://res.cloudinary.com/dt6rzq9tw/image/upload/v1694003963/ATLP_Champs/gqkblr12kdtq7qubz18r.jpg",
+    sellerId: 1);
+
+var product2 = Product(
+    id: 2,
+    name: "Pizza",
+    description: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligula, at mollis enim pretium in.
+ Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis venenatis, quam iaculis faucibus blandit,
+sellus ut odio condimentum, ''',
+    price: 1500,
+    image:
+        " https://res.cloudinary.com/dt6rzq9tw/image/upload/v1693993842/ATLP_Champs/yqfuvs5dwwbqropebbxh.jpg",
+    sellerId: 1);
+
 // - before reading the data on database we need to open connection to the database
 class DatabaseeService {
   Database? _database;
 
   Future<Database> get database async {
-    // if (_database != null) return _database!;
+    if (_database != null) {
+      print('Database already exists ${_database}');
+      return _database!;
+    }
+
     _database = await _initialize();
+
     return _database!;
   }
 
@@ -80,9 +111,7 @@ class DatabaseeService {
     } catch (error) {
       print('Error checking table existence: $error');
     }
-
     if (!hasTable) {
-      print('Creating table');
       await UserDB().createTable(database);
     }
   }
@@ -116,26 +145,41 @@ class DatabaseeService {
   Future<int> getDatabaseVersion() async {
     final db = await database;
     final result = await db.rawQuery('PRAGMA user_version;');
+    final mydb = await db.rawQuery(
+        'SELECT name FROM sqlite_master WHERE type="table" AND name="${UserDB().tableName}"');
+
+    if (mydb.isNotEmpty && mydb.first.values.isNotEmpty) {
+      final admin = await db.rawQuery(
+          '''SELECT * FROM ${mydb.first.values.first} WHERE id = 1  ''');
+
+      if (admin.isNotEmpty) {
+        print('Table exists: ${mydb.first.values.first} admin ${admin}');
+        final producttable = await db.rawQuery(
+            '''SELECT name FROM sqlite_master WHERE type="table" AND name="${ProductTable().tableName}"''');
+        if (producttable.isNotEmpty) {
+          print('Product table exists: ${producttable.first.values.first}');
+
+          // await ProductTable().insertProduct(product1);
+          await ProductTable().insertProduct(product2);
+        } else {
+          try {
+            await ProductTable().createTable(db);
+          } catch (error) {
+            print('Error creating product table: $error');
+          } finally {
+            print('Product table created ${producttable.first.values.first}');
+          }
+        }
+      } else {
+        ('''INSERT INTO ${mydb.first.values.first} (id,username, email, password) VALUES(1,'oliviertech','oliviertech@yopmail.com','test12345' ''');
+        print('No admin found with the specified conditions.');
+      }
+    }
 
     if (result.isNotEmpty && result.first.values.isNotEmpty) {
-      print('result $result');
+      // print('result ssss $result');
       return result.first.values.first as int;
     }
     return 0;
   }
 }
-
-
-
-  // Future<Database> _initialize() async {
-  //   final path = await fullpath;
-  //   databaseFactory = databaseFactoryFfi; // Initialize databaseFactoryFfi
-  //   return openDatabase(path,
-  //       version: 1, onCreate: _onCreate, singleInstance: true);
-  // }
-
-  // FutureOr<void> _onCreate(Database database, int version) async {
-  //   await database.execute(
-  //     'CREATE TABLE registered_users(id INTEGER PRIMARY KEY, username TEXT, email TEXT, password TEXT, created_at TEXT, updated_at TEXT)',
-  //   );
-  // }

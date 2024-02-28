@@ -3,15 +3,16 @@
 import "package:path/path.dart";
 
 class User {
+  int? id;
   final String? username;
   final String email;
   final String password;
-
   final String? createdAt = DateTime.now().toIso8601String();
   final String? updatedAt;
 
   User(
       {this.username,
+      this.id,
       required this.email,
       required this.password,
       String? updatedAt})

@@ -1,15 +1,15 @@
 class Product {
-  String id;
+  int id;
   String name;
   String description;
-  String price;
+  dynamic price;
   String image;
   String? category;
   String? rating;
-  String? countInStock;
-  String createdAt = DateTime.now().toString();
+  int? countInStock;
+  String? createdAt = DateTime.now().toIso8601String();
   String? updatedAt;
-  String sellerId;
+  int sellerId;
 
   Product({
     required this.id,
@@ -22,7 +22,7 @@ class Product {
     this.rating,
     this.countInStock,
     this.updatedAt,
-    required this.createdAt,
+    this.createdAt,
   });
 
   Map<String, dynamic> toMap() {
