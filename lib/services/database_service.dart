@@ -9,29 +9,29 @@ import 'package:sqflite/sqflite.dart';
 import 'package:foodapp/services/product_table.services.dart';
 import 'package:foodapp/models/products.model.dart';
 
-// Future databaseconnection() async {
-//   final database = openDatabase(
-//       // Set the path to the database. Note: Using the `join` function from the
-//       // `path` package is best practice to ensure the path is correctly
-//       // constructed for each platform.
-//       join(await getDatabasesPath(), 'wedeliverfoodapp.db'),
-//       // When the database is first created, create a table
-//       onCreate: (db, version) {
-//     // Run the CREATE TABLE statement on the database.
-//     return db.execute(
-//       'CREATE TABLE registered_users(id INTEGER PRIMARY KEY, username TEXT, email TEXT, password TEXT)',
-//     );
-//   },
+Future databaseconnection() async {
+  final database = openDatabase(
+      // Set the path to the database. Note: Using the `join` function from the
+      // `path` package is best practice to ensure the path is correctly
+      // constructed for each platform.
+      join(await getDatabasesPath(), 'wedeliverfoodapp.db'),
+      // When the database is first created, create a table
+      onCreate: (db, version) {
+    // Run the CREATE TABLE statement on the database.
+    return db.execute(
+      'CREATE TABLE registered_users(id INTEGER PRIMARY KEY, username TEXT, email TEXT, password TEXT)',
+    );
+  },
 
-//       // Set the version. This executes the onCreate function and provides a
-//       // path to perform database upgrades and downgrades.
+      // Set the version. This executes the onCreate function and provides a
+      // path to perform database upgrades and downgrades.
 
-//       version: 1);
+      version: 1);
 
-//   print('Database Created $database');
+  print('Database Created $database');
 
-//   return database;
-// }
+  return database;
+}
 //  Image.asset(
 //                 "assets/images/diamond.jpeg",
 //                 height: 50,
@@ -255,7 +255,7 @@ class DatabaseService {
     }
   }
 
-  Future<void> initialize() async {
+  Future initialize() async {
     // Get the database path
     // final path = await getDatabasesPath();
     // final dbPath = join(path, 'wedeliverfoodapp1.db');
@@ -267,7 +267,7 @@ class DatabaseService {
     // Open the database connection and handle errors
     try {
       _database = await openDatabase(
-        dbPath,
+        join(await getDatabasesPath(), 'wedeliverfoodapp.db'),
         version: 1, // Adjust version if needed for schema changes
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
@@ -277,7 +277,6 @@ class DatabaseService {
       print('Error opening database: $error');
       // Handle other potential errors gracefully
     }
-
     // Create tables if necessary
     await _createTables();
   }
@@ -310,9 +309,9 @@ class DatabaseService {
           .createTable(_database!, 1); // Assuming no schema changes yet
     } else {
       final user = await getUsers();
-      // if (user.isEmpty) {
-      //   await insertAdmin();
-      // }
+      if (user.isEmpty) {
+        await insertAdmin();
+      }
       // await _database!.execute('DROP TABLE IF EXISTS ${UserDB().tableName}');
 
       print('Table userstable already exists.');
@@ -324,9 +323,9 @@ class DatabaseService {
           .createTable(_database!, 1); // Assuming no schema changes yet
     } else {
       final product = await getAllproduct();
-      // if (product.isEmpty) {
-      //   await insertProducts();
-      // }
+      if (product.isEmpty) {
+        await insertProducts();
+      }
       // await _database!.execute('DROP TABLE IF EXISTS productstable');
 
       print('Table productstable already exists ffff.${product}');
@@ -468,7 +467,6 @@ class DatabaseService {
       if (_database == null) {
         throw Exception('Database not initialized');
       }
-
       final List<Map<String, Object?>> productsMaps =
           await _database!.query(ProductTable().tableName);
       print("products date${productsMaps}");
@@ -497,8 +495,17 @@ class DatabaseService {
       ];
     } catch (e) {
       print("Error while getting product $e");
-
       return e as dynamic;
     }
+  }
+
+  Future<int> getDatabaseVersion() async {
+    final db = await _database;
+    final result = await db!.rawQuery('PRAGMA user_version;');
+    if (result.isNotEmpty && result.first.values.isNotEmpty) {
+      print("Database version: ${result.first.values.first}");
+      return result.first.values.first as int;
+    }
+    return 0;
   }
 }

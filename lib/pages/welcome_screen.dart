@@ -146,11 +146,12 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
                         final product = userProducts[productIndex];
                         return ListTile(
                           title: Text('Product: ${product.name ?? ''}'),
+                          // title: Text('Product: ${product.image ?? ''}'),
                           subtitle: Text('Price: ${product.price}'),
                           leading: Container(
                             width: 80, // Adjust the width as needed
-                            child: Image.network(
-                              product.image,
+                            child: Image(
+                              image: AssetImage(product.image ?? ''),
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) => Text(
                                   "Image loading failed"), // Or a custom error widget

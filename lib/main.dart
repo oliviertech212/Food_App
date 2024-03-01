@@ -31,6 +31,7 @@ Future<void> main() async {
     // Initialize the database service
     final databaseService = DatabaseService();
     await databaseService.initialize();
+    await databaseService.getDatabaseVersion();
 
     print("database initialized");
 
