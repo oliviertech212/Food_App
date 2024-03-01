@@ -3,7 +3,7 @@
 import "package:path/path.dart";
 
 class User {
-  int? id;
+  final int? id;
   final String? username;
   final String email;
   final String password;
@@ -27,6 +27,7 @@ class User {
 
   Map<String, Object?> toMap() {
     return {
+      'id': id,
       'username': username,
       'email': email,
       'password': password,

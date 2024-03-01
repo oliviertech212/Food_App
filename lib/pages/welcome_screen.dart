@@ -21,26 +21,34 @@ class MyWelcomePage extends StatefulWidget {
 
 class _MyWelcomePageState extends State<MyWelcomePage> {
   Future<List<User>>? futureUsers;
-  final userDB = UserDB();
+  // final userDB = UserDB();
+  final table = DatabaseService();
   Future<List<Product>>? futureallproducts;
-  final produstTable = ProductTable();
 
-  Future<String> getpath() async {
-    final fullPath = await DatabaseeService().fullpath; // Await the full path
-    print('path: $fullPath');
-    return fullPath;
-  }
+  // Future<String> getpath() async {
+  //   final fullPath =  DatabaseService(); // Await the full path
+  //   print('path: $fullPath');
+  //   return fullPath;
+  // }
 
-  @override
   void initState() {
     super.initState();
-    fetchusers();
+    // fetchusers();
+    table.initialize().then((_) {
+      fetchusers();
+    });
   }
 
-  void fetchusers() {
+  void fetchusers() async {
+    // Check for database initialization
+    if (table.database == null) {
+      throw Exception(" on homepage Database not initialized");
+    }
     setState(() {
-      futureUsers = userDB.getUsers();
-      futureallproducts = produstTable.getAllproduct();
+      // table.insertAdmin();
+      // table.insertProducts();
+      futureUsers = table.getUsers();
+      futureallproducts = table.getAllproduct();
     });
   }
 
@@ -101,7 +109,7 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
           Future.wait([futureUsers as dynamic, futureallproducts as dynamic]),
       builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
@@ -118,42 +126,37 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
 
           return ListView.builder(
             itemCount: users.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, userIndex) {
+              final userProducts = products
+                  .where((product) => product.sellerId == users[userIndex].id)
+                  .toList();
               return Card(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListTile(
-                      title: Text('User: ${users[index].username ?? ''}'),
-                      subtitle: Text('Email: ${users[index].email}'),
+                      title: Text('User: ${users[userIndex].username ?? ''}'),
+                      subtitle: Text('Email: ${users[userIndex].email}'),
                     ),
-                    // Display product information related to this user
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: products.length,
-                      itemBuilder: (context, index) {
-                        // Check if the product is related to the current user
-
-                        if (products[index].sellerId == users[index].id) {
-                          return ListTile(
-                            title: Text("${products.length}"),
-                            // title:
-                            //     Text('Product: ${products[index].name ?? ''}'),
-                            subtitle: Text('Price: ${products[index].price}'),
-                            leading: Container(
-                              width: 80, // Adjust the width as needed
-                              child: Image.network(
-                                products[index].image,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => Text(
-                                    "Image loading failed"), // Or a custom error widget
-                              ),
+                      itemCount: userProducts.length,
+                      itemBuilder: (context, productIndex) {
+                        final product = userProducts[productIndex];
+                        return ListTile(
+                          title: Text('Product: ${product.name ?? ''}'),
+                          subtitle: Text('Price: ${product.price}'),
+                          leading: Container(
+                            width: 80, // Adjust the width as needed
+                            child: Image.network(
+                              product.image,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Text(
+                                  "Image loading failed"), // Or a custom error widget
                             ),
-                          );
-                        } else {
-                          return SizedBox
-                              .shrink(); // Empty widget if product is not related to this user
-                        }
+                          ),
+                        );
                       },
                     ),
                   ],

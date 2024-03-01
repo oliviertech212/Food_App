@@ -22,7 +22,7 @@ class _MySignupPageState extends State<MySignupPage> {
   final _useremailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final userDB = UserDB();
+  //- final userDB = DatabaseService();
 
   @override
   void initState() {
@@ -157,16 +157,6 @@ class _MySignupPageState extends State<MySignupPage> {
 
                     const SizedBox(height: 10.0),
 
-                    // MyTextField(
-                    //     labelText: "ConfirmPassword",
-                    //     inputControl: _passwordController,
-                    //     obscureText: true,
-                    //     keyboardType: TextInputType.visiblePassword,
-                    //     textInputAction: TextInputAction.next,
-                    //     maxLength: 8),
-
-                    // const SizedBox(height: 10.0),
-
                     MyElevatedButton(context, 50.0, 'Never Hungry Again!',
                         () async {
                       // Navigator.pushNamed(context, '/signup');
@@ -184,16 +174,16 @@ class _MySignupPageState extends State<MySignupPage> {
                           password: password,
                         );
 
-                        final id = await userDB.createUser(user);
+                        //- final id = await userDB.createUser(user);
 
-                        userDB.getUsers();
+                        //- userDB.getUsers();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const MyWelcomePage(),
                           ),
                         );
-                        print('User $id inserted');
+                        //- print('User $id inserted');
                       } catch (error) {
                         print('Error inserting user: $error');
                       } finally {
