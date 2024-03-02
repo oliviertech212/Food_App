@@ -8,6 +8,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:foodapp/services/product_table.services.dart';
 import 'package:foodapp/models/products.model.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:path/path.dart';
 
 Future databaseconnection() async {
   final database = openDatabase(
@@ -234,11 +238,19 @@ class DatabaseeServicesss {
   }
 }
 
-class DatabaseService {
+class DatabaseService1 {
   Database? _database;
 
-  Database? get database => _database;
+  // Database? get database => _database;
 
+  Future<Database> get database async {
+    if (_database != null) {
+      print('Database already exists ${_database}');
+      return _database!;
+    }
+
+    return await initialize();
+  }
   // Future<Database> get database async {
   //   // if (_database != null) {
   //   print('Database already exists ${_database}');
@@ -263,22 +275,27 @@ class DatabaseService {
     final path =
         await getApplicationDocumentsDirectory(); // Get the app's documents directory
     final dbPath = join(path.path, 'wedeliverfoodapp.db');
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String dir = documentsDirectory.path + "/ApplicationFolder";
+    String p = join(dir, "myDatabase.db");
 
     // Open the database connection and handle errors
     try {
       _database = await openDatabase(
-        join(await getDatabasesPath(), 'wedeliverfoodapp.db'),
-        version: 1, // Adjust version if needed for schema changes
+        // join(await getDatabasesPath(), 'wedeliverfoodapp.db'),
+        // dbPath,
+        p,
+        version: 2, // Adjust version if needed for schema changes
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
         singleInstance: true,
       );
     } catch (error) {
-      print('Error opening database: $error');
+      print('Error opening database on initializer : $error');
       // Handle other potential errors gracefully
     }
     // Create tables if necessary
-    await _createTables();
+    // await _createTables();
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -300,7 +317,7 @@ class DatabaseService {
 
   Future<void> _createTables() async {
     if (_database == null) {
-      throw Exception('Database not initialized');
+      throw Exception('Database not initialized on create table');
     }
 
     final userTableExists = await _userTableExists();
@@ -334,7 +351,7 @@ class DatabaseService {
 
   Future<bool> _userTableExists() async {
     if (_database == null) {
-      throw Exception('Database not initialized');
+      throw Exception('Database not initialized ont<ble exist');
     }
 
     final result = await _database!.rawQuery(
@@ -368,7 +385,7 @@ class DatabaseService {
 
   Future<void> insertAdmin() async {
     if (_database == null) {
-      throw Exception('Database not initialized');
+      throw Exception('Database not initialized on insert admin');
     }
 
     try {
@@ -383,7 +400,7 @@ class DatabaseService {
 
   Future<void> insertProducts() async {
     if (_database == null) {
-      throw Exception('Database not initialized');
+      throw Exception('Database not initialized on insert products');
     }
 
     try {
@@ -405,7 +422,7 @@ class DatabaseService {
   Future<int> createUser(User user) async {
     try {
       if (_database == null) {
-        throw Exception('Database not initialized');
+        throw Exception('Database not initialized on create user');
       }
       final data = await _database!.insert(
         ProductTable().tableName,
@@ -422,7 +439,7 @@ class DatabaseService {
 
   Future<List<User>> getUsers() async {
     if (_database == null) {
-      throw Exception('on getuseDatabase not initialized');
+      throw Exception('on getuseDatabase not initialized on get users');
     }
     final List<Map<String, dynamic>> maps =
         await _database!.query(UserDB().tableName);
@@ -446,7 +463,7 @@ class DatabaseService {
   Future<int> insertProduct(Product product) async {
     try {
       if (_database == null) {
-        throw Exception('Database not initialized');
+        throw Exception('Database not initialized on insert product');
       }
 
       final data = await _database!.insert(
@@ -465,7 +482,7 @@ class DatabaseService {
   Future<List<Product>> getAllproduct() async {
     try {
       if (_database == null) {
-        throw Exception('Database not initialized');
+        throw Exception('Database not initialized on get all products');
       }
       final List<Map<String, Object?>> productsMaps =
           await _database!.query(ProductTable().tableName);
@@ -507,5 +524,284 @@ class DatabaseService {
       return result.first.values.first as int;
     }
     return 0;
+  }
+}
+
+class DatabaseService {
+  Database? _database;
+  Future<Database> get database async {
+    if (_database != null) {
+      print('Database already exists ${_database}');
+      return _database!;
+    }
+
+    return await initialize();
+  }
+
+  Future<void> initState() async {
+    // Moved initialize() to initState()
+    if (_database == null) {
+      await initialize();
+    }
+  }
+
+  Future initialize() async {
+    // Get the database path
+    // final path = await getDatabasesPath();
+    // final dbPath = join(path, 'wedeliverfoodapp1.db');
+
+    final path =
+        await getApplicationDocumentsDirectory(); // Get the app's documents directory
+    final dbPath = join(path.path, 'wedeliverfoodapp.db');
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String dir = documentsDirectory.path + "/ApplicationFolder";
+    String p = join(dir, 'wedeliverfoodapp.db');
+
+    // Open the database connection and handle errors
+    try {
+      _database = await openDatabase(
+        // join(await getDatabasesPath(), 'wedeliverfoodapp.db'),
+        // dbPath,
+        p,
+        version: 2,
+        onCreate: _onCreate,
+        onUpgrade: _onUpgrade,
+        singleInstance: true,
+      );
+    } catch (error) {
+      print('Error opening database on initializer : $error');
+      // Handle other potential errors gracefully
+    }
+    // Create tables if necessary
+    // await _createTables();
+  }
+
+  // Future initialize() async {
+  //   try {
+  //     // final path = await getDatabasesPath();
+  //     // final dbPath = join(path, 'wedeliverfoodapp1.db');
+
+  //     final path =
+  //         await getApplicationDocumentsDirectory(); // Get the app's documents directory
+  //     final dbPath = join(path.path, 'wedeliverfoodapp.db');
+
+  //     // Open the database connection and handle errors
+  //     _database = await openDatabase(
+  //       dbPath,
+  //       version: 1, // Adjust version if needed for schema changes
+  //       onCreate: _onCreate,
+  //       onUpgrade: _onUpgrade,
+  //     );
+
+  //     print('Database opened successfully.');
+  //   } catch (error) {
+  //     print('Error initializing database: $error');
+  //     // Handle other potential errors gracefully
+  //     throw error; // Add this line to throw the error if initialization fails
+  //   }
+  // }
+
+  FutureOr<void> _onUpgrade(
+      Database database, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      var tableColumns =
+          await database.rawQuery('PRAGMA table_info(${UserDB().tableName});');
+
+      bool createdAtExists =
+          tableColumns.indexWhere((row) => row['name'] == 'created_at') != -1;
+      if (!createdAtExists) {
+        await database.execute(
+          'ALTER TABLE ${UserDB().tableName} ADD COLUMN created_at TEXT DEFAULT CURRENT_TIMESTAMP',
+        );
+      }
+      bool updatedAtExists =
+          tableColumns.indexWhere((row) => row['name'] == 'updated_at') != -1;
+      if (!updatedAtExists) {
+        await database.execute(
+          'ALTER TABLE ${UserDB().tableName} ADD COLUMN updated_at TEXT DEFAULT CURRENT_TIMESTAMP',
+        );
+      }
+    }
+  }
+
+  FutureOr<void> _onCreate(Database database, int version) async {
+    // Check if the table exists
+    bool hasTable = false;
+    bool hasproducttable = false;
+    bool hasadmin = false;
+    try {
+      final result = await database.rawQuery(
+          'SELECT name FROM sqlite_master WHERE type="table" AND name="${UserDB().tableName}"');
+      hasTable = result.isNotEmpty;
+      if (hasTable) {
+        final result = await database.rawQuery(
+          '''SELECT 1 FROM ${UserDB().tableName} WHERE id = 1''',
+        );
+        print(" user exist ${result.first}");
+        if (result.isNotEmpty) {
+          hasadmin = true;
+        } else {
+          await database.execute(
+            '''INSERT INTO ${UserDB().tableName} (id, username, email, password) VALUES(1, 'oliviertech', 'oliviertech@yopmail.com', 'test12345')''',
+          );
+        }
+      }
+
+      final resultproduct = await database.rawQuery(
+        '''SELECT 1 FROM sqlite_master WHERE type="table" AND name="${ProductTable().tableName}"''',
+      );
+      hasproducttable = resultproduct.isNotEmpty;
+      if (hasadmin && !hasproducttable) {
+        await ProductTable().createTable(database, version);
+      } else if (hasadmin && hasproducttable) {
+        print("insertinf product");
+        await database.insert(
+          ProductTable().tableName,
+          product1.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await database.insert(
+          ProductTable().tableName,
+          product2.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await database.insert(
+          ProductTable().tableName,
+          product5.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await database.insert(
+          ProductTable().tableName,
+          product4.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await database.insert(
+          ProductTable().tableName,
+          product3.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      } else {
+        print("things are ok");
+      }
+    } catch (error) {
+      print('Error checking table existence: $error');
+    }
+    if (!hasTable) {
+      print('creating usertable');
+      await UserDB().createTable(database, version);
+    }
+
+    if (!hasproducttable) {
+      print('creating producttable');
+      await ProductTable().createTable(database, version);
+    }
+  }
+
+  Future<int> getDatabaseVersion() async {
+    final db = await database;
+    final result = await db.rawQuery('PRAGMA user_version;');
+    if (result.isNotEmpty && result.first.values.isNotEmpty) {
+      print("Database version: ${result.first.values.first}");
+      return result.first.values.first as int;
+    }
+    return 0;
+  }
+
+  Future<List<User>> getUsers() async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query(UserDB().tableName);
+    final users = await _database!.rawQuery(
+        '''SELECT * FROM ${UserDB().tableName} ORDER BY email DESC''');
+
+    print('Users $users');
+    if (maps.isEmpty) {
+      await db.execute(
+        '''INSERT INTO ${UserDB().tableName} (id, username, email, password) VALUES(1, 'oliviertech', 'oliviertech@yopmail.com', 'test12345')''',
+      );
+
+      // await db.insert(
+      //   UserDB().tableName,
+      //   User().toMap(),
+      //   conflictAlgorithm: ConflictAlgorithm.replace,
+      // );
+    }
+
+    // return users.map((user) => User.fromJson(user)).toList();
+    return List.generate(maps.length, (i) {
+      return User(
+        username: maps[i]['username'],
+        email: maps[i]['email'],
+        id: maps[i]['id'],
+        password: maps[i]['password'],
+      );
+    });
+    // map fetched user s fo our user model
+  }
+
+  Future<List<Product>> getAllproduct() async {
+    final db = await database;
+    try {
+      if (_database == null) {
+        throw Exception('Database not initialized on get all products');
+      }
+      final List<Map<String, Object?>> productsMaps =
+          await db.query(ProductTable().tableName);
+      print("products date${productsMaps}");
+
+      if (productsMaps.isEmpty) {
+        await db.insert(
+          ProductTable().tableName,
+          product1.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await db.insert(
+          ProductTable().tableName,
+          product2.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await db.insert(
+          ProductTable().tableName,
+          product3.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await db.insert(
+          ProductTable().tableName,
+          product4.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await db.insert(
+          ProductTable().tableName,
+          product5.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+
+      // Convert the list of each dog's fields into a list of `Dog` objects.
+      return [
+        for (final {
+              'id': id as int,
+              'name': name as String,
+              'price': price as dynamic,
+              'description': description as String,
+              'category': category as dynamic,
+              'countInStock': countInStock as dynamic,
+              'sellerId': sellerId as dynamic,
+              'createdAt': createdAt as dynamic,
+              'updatedAt': updatedAt as dynamic,
+              'image': image as String
+            } in productsMaps)
+          Product(
+              id: id,
+              name: name,
+              price: price,
+              description: description,
+              sellerId: sellerId,
+              image: image)
+      ];
+    } catch (e) {
+      print("Error while getting product $e");
+      return e as dynamic;
+    }
   }
 }

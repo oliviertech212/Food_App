@@ -33,7 +33,7 @@ Future<void> main() async {
     await databaseService.initialize();
     await databaseService.getDatabaseVersion();
 
-    print("database initialized");
+    print("database initialized${databaseService.database}");
 
     // Start the application
     runApp(const FoodApp());
