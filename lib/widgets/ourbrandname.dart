@@ -28,8 +28,9 @@ class MyTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final dynamic maxLength;
-
   final inputControl;
+  final String Function(String?)? validator;
+
   const MyTextField({
     Key? key,
     required this.labelText,
@@ -38,13 +39,15 @@ class MyTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
     this.maxLength,
+    this.validator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
           focusColor: AppColors.bgprimaryColor,
+          // errorStyle: TextStyle(color: Colors.black),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
             borderSide: BorderSide(color: AppColors.bgprimaryColor),
@@ -63,6 +66,8 @@ class MyTextField extends StatelessWidget {
       // - optional parameter for password field
       obscureText: obscureText,
       keyboardType: keyboardType,
+      validator: validator,
+
       textInputAction: textInputAction,
       maxLength: maxLength,
     );

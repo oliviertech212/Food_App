@@ -43,19 +43,20 @@ Future<void> main() async {
   }
 }
 
-// Future main() async {
-//   sqfliteFfiInit();
-
-//   databaseFactory = databaseFactoryFfi;
-//   runApp(const FoodApp());
-// }
-
-class FoodApp extends StatelessWidget {
+class FoodApp extends StatefulWidget {
   const FoodApp({super.key});
+
+  @override
+  State<FoodApp> createState() => _FoodAppState();
+}
+
+class _FoodAppState extends State<FoodApp> {
+  var _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: _scaffoldKey,
       theme: foodApptheme,
       title: 'welcome',
       debugShowCheckedModeBanner: false,

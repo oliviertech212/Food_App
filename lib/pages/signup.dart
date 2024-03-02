@@ -18,8 +18,10 @@ class MySignupPage extends StatefulWidget {
 }
 
 class _MySignupPageState extends State<MySignupPage> {
+  final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
-  final _useremailController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
 
   //- final userDB = DatabaseService();
@@ -126,70 +128,104 @@ class _MySignupPageState extends State<MySignupPage> {
                     //   // maxLength: 8,
                     // ),
                     const SizedBox(height: 12.0),
-                    MyTextField(
-                        labelText: "UserName",
-                        inputControl: _usernameController),
-
-                    const SizedBox(height: 12.0),
-                    MyTextField(
-                        labelText: "Email",
-                        inputControl: _useremailController,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next),
-
-                    const SizedBox(height: 12.0),
-                    MyTextField(
-                        labelText: "Password",
-                        inputControl: _passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.next,
-                        maxLength: 8),
-
-                    const SizedBox(height: 12.0),
-                    MyTextField(
-                        labelText: "ConfirmPassword",
-                        inputControl: _passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.next,
-                        maxLength: 8),
-
-                    const SizedBox(height: 10.0),
-
-                    MyElevatedButton(context, 50.0, 'Never Hungry Again!',
-                        () async {
-                      // Navigator.pushNamed(context, '/signup');
-
-                      final username = _usernameController.text;
-                      final email = _useremailController.text;
-                      final password = _passwordController.text;
-
-                      // Validate user input (e.g., check passwords match, email format, etc.)
-
-                      try {
-                        final user = User(
-                          username: username,
-                          email: email,
-                          password: password,
-                        );
-
-                        //- final id = await userDB.createUser(user);
-
-                        //- userDB.getUsers();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyWelcomePage(),
+                    Form(
+                        key: _formKey,
+                        child: Column(children: [
+                          MyTextField(
+                            labelText: "UserName",
+                            inputControl: _usernameController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a username';
+                              }
+                              return '';
+                            },
                           ),
-                        );
-                        //- print('User $id inserted');
-                      } catch (error) {
-                        print('Error inserting user: $error');
-                      } finally {
-                        Navigator.pushNamed(context, '/login');
-                      }
-                    }),
+
+                          const SizedBox(height: 12.0),
+                          MyTextField(
+                            labelText: "Email",
+                            inputControl: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter an email';
+                              } else if (!value.contains('@') ||
+                                  !value.contains('.') ||
+                                  value.length < 5) {
+                                return 'Please enter a valid email';
+                              }
+                              return '';
+                            },
+                          ),
+
+                          const SizedBox(height: 12.0),
+                          MyTextField(
+                            labelText: "Password",
+                            inputControl: _passwordController,
+                            obscureText: true,
+                            keyboardType: TextInputType.visiblePassword,
+                            textInputAction: TextInputAction.next,
+                            maxLength: 9,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a password';
+                              } else if (value.length < 5) {
+                                return 'Password must be at least 8 characters';
+                              }
+                              return '';
+                            },
+                          ),
+
+                          const SizedBox(height: 12.0),
+                          MyTextField(
+                              labelText: "ConfirmPassword",
+                              inputControl: _confirmPasswordController,
+                              obscureText: true,
+                              keyboardType: TextInputType.visiblePassword,
+                              textInputAction: TextInputAction.next,
+                              maxLength: 9,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please confirm your password';
+                                } else if (value != _passwordController.text) {
+                                  return 'Passwords do not match';
+                                }
+                                return '';
+                              }),
+
+                          const SizedBox(height: 10.0),
+
+                          // MyTextField(
+                          //     labelText: "ConfirmPassword",
+                          //     inputControl: _passwordController,
+                          //     obscureText: true,
+                          //     keyboardType: TextInputType.visiblePassword,
+                          //     textInputAction: TextInputAction.next,
+                          //     maxLength: 8),
+
+                          // const SizedBox(height: 10.0),
+
+                          MyElevatedButton(context, 50.0, 'Never Hungry Again!',
+                              () {
+                            // Navigator.pushNamed(context, '/signup');
+
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Processing Data'),
+                                  backgroundColor: Color(0xFF00B87C),
+                                ),
+                              );
+                            }
+                          }),
+
+                          // const SizedBox(height: 12.0),
+                          // MyElevatedButton(context, double.infinity, 'Sign In', () {
+                          //   Navigator.pushNamed(context, '/signin');
+                          // }),
+                        ])),
 
                     const SizedBox(
                       height: 10,
