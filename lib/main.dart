@@ -2,45 +2,27 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
-import 'package:foodapp/services/database_service.dart';
+import 'package:foodapp/pages/verifyemail.dart';
 import 'package:foodapp/utils/theme.dart';
 import 'package:foodapp/pages/signup.dart';
 import 'package:foodapp/pages/forgot_password.dart';
 import 'package:foodapp/pages/verification.dart';
 import 'package:foodapp/pages/new_password.dart';
-import 'package:flutter/widgets.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-  // Set up database and platform-specific initializations
-  try {
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
-    } else if (kIsWeb) {
-      //- Use databaseFactoryFfiWeb for web
-      databaseFactory = databaseFactoryFfiWeb;
-    }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-    // Initialize the database service
-    final databaseService = DatabaseService();
-    await databaseService.initialize();
-    await databaseService.getDatabaseVersion();
-
-    print("database initialized${databaseService.database}");
-
-    // Start the application
-    runApp(const FoodApp());
-  } catch (error) {
-    print('Error initializing database main: ${error.toString()}');
-    // Handle other potential errors gracefully
-  }
+  FirebaseAuthenticationService firebaseAuthenticationService =
+      FirebaseAuthenticationService();
+  await firebaseAuthenticationService.initialize();
+  runApp(const FoodApp());
 }
 
 class FoodApp extends StatefulWidget {
@@ -51,12 +33,12 @@ class FoodApp extends StatefulWidget {
 }
 
 class _FoodAppState extends State<FoodApp> {
-  var _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  // var _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      scaffoldMessengerKey: _scaffoldKey,
+      // scaffoldMessengerKey: _scaffoldKey,
       theme: foodApptheme,
       title: 'welcome',
       debugShowCheckedModeBanner: false,
@@ -68,6 +50,7 @@ class _FoodAppState extends State<FoodApp> {
         '/forgot-password': (context) => ForgotPassword(),
         '/verification': (context) => const verification(),
         '/new-password': (context) => const NewPassword(),
+        '/verifyemail': (context) => const VerifyEmailScreen(),
       },
     );
   }

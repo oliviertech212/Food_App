@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/widgets/ourbrandname.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
@@ -14,6 +16,27 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool loading = false;
+
+  final FirebaseAuthenticationService _auth = FirebaseAuthenticationService();
+
+  void _signIn() async {
+    String password = _passwordController.text;
+    String email = _usernameController.text;
+
+    setState(() {
+      loading = true;
+    });
+
+    User? user = await _auth.signInWithEmailAndPassword(email, password);
+    if (user != null) {
+      loading = false;
+      Navigator.pushNamed(context, '/home');
+    } else {
+      loading = false;
+      Navigator.pushNamed(context, '/signup');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +79,8 @@ class _LoginPageState extends State<LoginPage> {
                                 inputControl: _usernameController,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter an email';
-                                  } else if (!value.contains('@') ||
-                                      !value.contains('.') ||
-                                      value.length < 5) {
-                                    return 'Please enter a valid email';
-                                  }
-                                  return '';
-                                }),
+                                field: 'email',
+                                validator: (value) {}),
                             const SizedBox(height: 10),
                             MyTextField(
                               labelText: "Password",
@@ -74,14 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                               keyboardType: TextInputType.visiblePassword,
                               textInputAction: TextInputAction.next,
                               maxLength: 9,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter a password';
-                                } else if (value.length < 9) {
-                                  return 'Password must be at least 8 characters';
-                                }
-                                return '';
-                              },
+                              field: 'password',
+                              validator: (value) {},
                             ),
                             const SizedBox(height: 10),
                             TextButton(
@@ -98,21 +107,19 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            MyElevatedButton(
-                              context,
-                              50.0,
-                              'Eat Away!',
-                              () {
-                                if (_formKey.currentState!.validate()) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Processing Data'),
-                                    ),
-                                  );
-                                  Navigator.pushNamed(context, '/home');
-                                }
-                              },
-                            ),
+                            MyElevatedButton(context, 50.0, 'Eat Away!', () {
+                              print("clcked");
+
+                              if (_formKey.currentState!.validate()) {
+                                _signIn();
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   const SnackBar(
+                                //     content: Text('Processing Data'),
+                                //   ),
+                                // );
+                                // Navigator.pushNamed(context, '/home');
+                              }
+                            }, loading),
                             const SizedBox(height: 10),
                             Column(
                               children: <Widget>[
@@ -138,14 +145,9 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                             const SizedBox(height: 10),
-                            MyElevatedButton(
-                              context,
-                              50.0,
-                              'sign up',
-                              () {
-                                Navigator.pushNamed(context, '/signup');
-                              },
-                            ),
+                            MyElevatedButton(context, 50.0, 'sign up', () {
+                              Navigator.pushNamed(context, '/signup');
+                            }, loading),
                           ]),
                         )
                       ],

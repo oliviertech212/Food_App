@@ -39,6 +39,8 @@ dependencies:
   sqflite_common_ffi:
   sqflite_common_ffi_web: ^0.4.2+3
   path_provider:
+  firebase_core: ^2.25.5
+  firebase_auth: ^4.17.6
 
 dev_dependencies:
   flutter_test:

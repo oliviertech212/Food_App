@@ -14,6 +14,7 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,33 +68,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               inputControl: _usernameController,
                               keyboardType: TextInputType.emailAddress,
                               textInputAction: TextInputAction.next,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter an email';
-                                } else if (!value.contains('@') ||
-                                    !value.contains('.') ||
-                                    value.length < 5) {
-                                  return 'Please enter a valid email';
-                                }
-                                return '';
-                              }),
+                              field: 'email',
+                              validator: (value) {}),
                           const SizedBox(height: 20),
-                          MyElevatedButton(
-                            context,
-                            50.0,
-                            'Reset Password',
-                            () {
-                              if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Processing Data'),
-                                  ),
-                                );
+                          MyElevatedButton(context, 50.0, 'Reset Password', () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Processing Data'),
+                                ),
+                              );
 
-                                Navigator.pushNamed(context, '/verification');
-                              }
-                            },
-                          )
+                              Navigator.pushNamed(context, '/verification');
+                            }
+                          }, loading)
                         ]),
                       )
                     ],

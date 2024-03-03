@@ -15,6 +15,7 @@ class NewPassword extends StatefulWidget {
 class _NewPasswordState extends State<NewPassword> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool loading = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -72,14 +73,8 @@ class _NewPasswordState extends State<NewPassword> {
                                 obscureText: true,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.next,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a password';
-                                  } else if (value.length < 5) {
-                                    return 'Password must be at least 9 characters';
-                                  }
-                                  return '';
-                                },
+                                field: 'password',
+                                validator: (value) {},
                                 maxLength: 9),
                             MyTextField(
                                 labelText: "Reconfirm new password",
@@ -87,15 +82,8 @@ class _NewPasswordState extends State<NewPassword> {
                                 obscureText: true,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.next,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please confirm your password';
-                                  } else if (value !=
-                                      _passwordController.text) {
-                                    return 'Passwords do not match';
-                                  }
-                                  return '';
-                                },
+                                field: 'confirmPassword ',
+                                validator: (value) {},
                                 maxLength: 9),
                             const SizedBox(height: 10),
                             MyElevatedButton(
@@ -116,6 +104,7 @@ class _NewPasswordState extends State<NewPassword> {
                                 }
                                 Navigator.pushNamed(context, '/login');
                               },
+                              loading,
                             ),
                           ]))
                     ],

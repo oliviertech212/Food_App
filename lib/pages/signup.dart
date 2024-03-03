@@ -1,7 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:foodapp/models/users.dart';
-import 'package:foodapp/pages/welcome_screen.dart';
-import 'package:foodapp/services/users.dart';
+import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/widgets/ourbrandname.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
@@ -23,25 +22,41 @@ class _MySignupPageState extends State<MySignupPage> {
   final _emailController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool loading = false;
 
-  //- final userDB = DatabaseService();
-
-  @override
-  void initState() {
-    if (widget.user != null) {
-      _usernameController.text = widget.user!.username!;
-      _useremailController.text = widget.user!.email;
-      _passwordController.text = widget.user!.password;
-    }
-    super.initState();
-  }
+// -firebase auth instance
+  final FirebaseAuthenticationService _auth = FirebaseAuthenticationService();
 
   @override
   void dispose() {
     _usernameController.dispose();
-    _useremailController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void _signUp() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String username = _usernameController.text;
+    String confirmPassword = _confirmPasswordController.text;
+
+    setState(() {
+      loading = true;
+    });
+
+    User? user =
+        await _auth.signUpWithEmailAndPassword(email, password, username);
+    if (user != null) {
+      loading = false;
+      print('User created');
+      Navigator.pushNamed(context, '/verification');
+    } else {
+      loading = false;
+      print('User not created');
+      Navigator.pushNamed(context, '/signup');
+    }
   }
 
   @override
@@ -134,12 +149,9 @@ class _MySignupPageState extends State<MySignupPage> {
                           MyTextField(
                             labelText: "UserName",
                             inputControl: _usernameController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a username';
-                              }
-                              return '';
-                            },
+                            keyboardType: TextInputType.text,
+                            field: "username",
+                            validator: (value) {},
                           ),
 
                           const SizedBox(height: 12.0),
@@ -148,16 +160,8 @@ class _MySignupPageState extends State<MySignupPage> {
                             inputControl: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter an email';
-                              } else if (!value.contains('@') ||
-                                  !value.contains('.') ||
-                                  value.length < 5) {
-                                return 'Please enter a valid email';
-                              }
-                              return '';
-                            },
+                            field: 'email',
+                            validator: (value) {},
                           ),
 
                           const SizedBox(height: 12.0),
@@ -168,32 +172,20 @@ class _MySignupPageState extends State<MySignupPage> {
                             keyboardType: TextInputType.visiblePassword,
                             textInputAction: TextInputAction.next,
                             maxLength: 9,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a password';
-                              } else if (value.length < 5) {
-                                return 'Password must be at least 8 characters';
-                              }
-                              return '';
-                            },
+                            field: "password",
+                            validator: (value) {},
                           ),
 
                           const SizedBox(height: 12.0),
                           MyTextField(
-                              labelText: "ConfirmPassword",
+                              labelText: "confirmPassword",
                               inputControl: _confirmPasswordController,
                               obscureText: true,
                               keyboardType: TextInputType.visiblePassword,
                               textInputAction: TextInputAction.next,
                               maxLength: 9,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please confirm your password';
-                                } else if (value != _passwordController.text) {
-                                  return 'Passwords do not match';
-                                }
-                                return '';
-                              }),
+                              field: "confirmPassword",
+                              validator: (value) {}),
 
                           const SizedBox(height: 10.0),
 
@@ -208,18 +200,19 @@ class _MySignupPageState extends State<MySignupPage> {
                           // const SizedBox(height: 10.0),
 
                           MyElevatedButton(context, 50.0, 'Never Hungry Again!',
-                              () {
+                              () async {
                             // Navigator.pushNamed(context, '/signup');
+                            print(
+                                'Button clicked $loading ${_formKey.currentState!.validate()} ');
 
                             if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Processing Data'),
-                                  backgroundColor: Color(0xFF00B87C),
-                                ),
-                              );
+                              print('Form validated');
+                              _signUp();
+                            } else {
+                              print(
+                                  'Form not validated'); // Debugging print statement
                             }
-                          }),
+                          }, loading),
 
                           // const SizedBox(height: 12.0),
                           // MyElevatedButton(context, double.infinity, 'Sign In', () {
