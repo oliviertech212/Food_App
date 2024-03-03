@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/models/users.dart';
+import 'package:foodapp/pages/welcome_screen.dart';
+import 'package:foodapp/services/users.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/widgets/ourbrandname.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
+import 'package:foodapp/services/database_service.dart';
 
 class MySignupPage extends StatefulWidget {
-  const MySignupPage({super.key});
+  final User? user;
+  final ValueChanged<String>? onSubmit;
+
+  const MySignupPage({Key? key, this.user, this.onSubmit}) : super(key: key);
 
   @override
   State<MySignupPage> createState() => _MySignupPageState();
@@ -12,9 +19,32 @@ class MySignupPage extends StatefulWidget {
 
 class _MySignupPageState extends State<MySignupPage> {
   final _usernameController = TextEditingController();
+  final _useremailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  //- final userDB = DatabaseService();
+
+  @override
+  void initState() {
+    if (widget.user != null) {
+      _usernameController.text = widget.user!.username!;
+      _useremailController.text = widget.user!.email;
+      _passwordController.text = widget.user!.password;
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _useremailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isEditing = widget.user != null;
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       // backgroundColor: AppColors.bgSecondary.withOpacity(0.2),
@@ -103,7 +133,7 @@ class _MySignupPageState extends State<MySignupPage> {
                     const SizedBox(height: 12.0),
                     MyTextField(
                         labelText: "Email",
-                        inputControl: _usernameController,
+                        inputControl: _useremailController,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next),
 
@@ -127,23 +157,39 @@ class _MySignupPageState extends State<MySignupPage> {
 
                     const SizedBox(height: 10.0),
 
-                    // MyTextField(
-                    //     labelText: "ConfirmPassword",
-                    //     inputControl: _passwordController,
-                    //     obscureText: true,
-                    //     keyboardType: TextInputType.visiblePassword,
-                    //     textInputAction: TextInputAction.next,
-                    //     maxLength: 8),
-
-                    // const SizedBox(height: 10.0),
-
-                    MyElevatedButton(context, 50.0, 'Never Hungry Again!', () {
+                    MyElevatedButton(context, 50.0, 'Never Hungry Again!',
+                        () async {
                       // Navigator.pushNamed(context, '/signup');
+
+                      final username = _usernameController.text;
+                      final email = _useremailController.text;
+                      final password = _passwordController.text;
+
+                      // Validate user input (e.g., check passwords match, email format, etc.)
+
+                      try {
+                        final user = User(
+                          username: username,
+                          email: email,
+                          password: password,
+                        );
+
+                        //- final id = await userDB.createUser(user);
+
+                        //- userDB.getUsers();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyWelcomePage(),
+                          ),
+                        );
+                        //- print('User $id inserted');
+                      } catch (error) {
+                        print('Error inserting user: $error');
+                      } finally {
+                        Navigator.pushNamed(context, '/login');
+                      }
                     }),
-                    // const SizedBox(height: 12.0),
-                    // MyElevatedButton(context, double.infinity, 'Sign In', () {
-                    //   Navigator.pushNamed(context, '/signin');
-                    // }),
 
                     const SizedBox(
                       height: 10,

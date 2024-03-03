@@ -1,20 +1,48 @@
 // models adre used when you are working with api data
 // example when you want to render data based on that model
+import "package:path/path.dart";
 
 class User {
-  final String name;
+  final int? id;
+  final String? username;
   final String email;
   final String password;
+  final String? createdAt = DateTime.now().toIso8601String();
+  final String? updatedAt;
 
-  User({required this.name, required this.email, required this.password});
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      name: json['name'],
-      email: json['email'],
-      password: json['password'],
-    );
+  User(
+      {this.username,
+      this.id,
+      required this.email,
+      required this.password,
+      String? updatedAt})
+      : updatedAt = updatedAt ?? DateTime.now().toIso8601String() {
+    if (email.isEmpty) {
+      throw ArgumentError('email cannot be empty');
+    }
+    if (password.isEmpty) {
+      throw ArgumentError('password cannot be empty');
+    }
   }
+
+  Map<String, Object?> toMap() {
+    return {
+      'id': id,
+      'username': username,
+      'email': email,
+      'password': password,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+    };
+  }
+  // factory User.fromJson(Map<String, dynamic> json) {
+  //   return User(
+  //     username: json['name'],
+  //     email: json['email'],
+  //     password: json['password'],
+  //     updatedAt: json['updated_at'],
+  //   );
+  // }
 }
 
 

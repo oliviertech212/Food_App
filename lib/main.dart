@@ -1,15 +1,54 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
+import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/utils/theme.dart';
 import 'package:foodapp/pages/signup.dart';
 import 'package:foodapp/pages/forgot_password.dart';
 import 'package:foodapp/pages/verification.dart';
 import 'package:foodapp/pages/new_password.dart';
+import 'package:flutter/widgets.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
-  runApp(const FoodApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
+
+  // Set up database and platform-specific initializations
+  try {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    } else if (kIsWeb) {
+      //- Use databaseFactoryFfiWeb for web
+      databaseFactory = databaseFactoryFfiWeb;
+    }
+
+    // Initialize the database service
+    final databaseService = DatabaseService();
+    await databaseService.initialize();
+    await databaseService.getDatabaseVersion();
+
+    print("database initialized${databaseService.database}");
+
+    // Start the application
+    runApp(const FoodApp());
+  } catch (error) {
+    print('Error initializing database main: ${error.toString()}');
+    // Handle other potential errors gracefully
+  }
 }
+
+// Future main() async {
+//   sqfliteFfiInit();
+
+//   databaseFactory = databaseFactoryFfi;
+//   runApp(const FoodApp());
+// }
 
 class FoodApp extends StatelessWidget {
   const FoodApp({super.key});

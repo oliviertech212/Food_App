@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/pages/welcome_screen.dart';
 import 'package:foodapp/widgets/ourbrandname.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 
@@ -74,6 +75,17 @@ class HomePage extends StatelessWidget {
                       context, '/login', (route) => false);
                 }),
               ),
+              SizedBox(
+                  height: 50,
+                  width: 200,
+                  child: MyElevatedButton(context, 50.0, "View user", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MyWelcomePage(),
+                      ),
+                    );
+                  })),
             ],
           ),
         ),
