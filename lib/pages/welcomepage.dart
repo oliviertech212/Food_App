@@ -5,7 +5,6 @@ import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 
-
 void main() {
   runApp(WelcomePage());
 }
@@ -25,6 +24,7 @@ class _WelcomePagesState extends State<WelcomePage> {
       image: 'assets/images/pizza.jpeg',
       description: 'Tasty pizza with cheese and tomato sauce',
       price: 10.99,
+      category: 1,
       sellerId: 1,
     ),
     Product(
@@ -33,6 +33,7 @@ class _WelcomePagesState extends State<WelcomePage> {
       image: 'assets/images/chicken.jpeg',
       description: 'Tasty chicken with cheese and tomato sauce',
       price: 10.99,
+      category: 2,
       sellerId: 2,
     ),
     Product(
@@ -41,6 +42,7 @@ class _WelcomePagesState extends State<WelcomePage> {
       image: 'assets/images/chickenwrap.jpeg',
       description: 'Tasty chicken wrap with cheese and tomato sauce',
       price: 10.99,
+      category: 3,
       sellerId: 3,
     ),
     Product(
@@ -49,56 +51,17 @@ class _WelcomePagesState extends State<WelcomePage> {
       image: 'assets/images/pilaurice.jpeg',
       description: 'Tasty sushi with cheese and tomato sauce',
       price: 10.99,
+      category: 4,
       sellerId: 4,
     ),
     Product(
-      id: 5,
-      name: 'spanish rice',
-      description: 'Tasty spanish rice with cheese and tomato sauce',
-      price: 10.99,
-      image: 'assets/images/spanishrice.jpeg',
-      sellerId: 5,
-    ),
-    Product(
-      id: 6,
-      name: 'chicken',
-      image: 'assets/images/chicken.jpeg',
-      description: 'Tasty chicken with cheese and tomato sauce',
-      price: 10.99,
-      sellerId: 6,
-    ),  
-    Product(
-      id: 7,
-      name: 'chicken wrap',
-      image: 'assets/images/chickenwrap.jpeg',
-      description: 'Tasty chicken wrap with cheese and tomato sauce',
-      price: 10.99,
-      sellerId: 7,
-    ),
-    Product(
-      id: 8,
-      name: 'Sushi',
-      image: 'assets/images/pilaurice.jpeg',
-      description: 'Tasty sushi with cheese and tomato sauce',
-      price: 10.99,
-      sellerId: 8,
-    ),
-    Product(
-      id: 9,
-      name: 'spanish rice',
-      description: 'Tasty spanish rice with cheese and tomato sauce',
-      price: 10.99,
-      image: 'assets/images/spanishrice.jpeg',
-      sellerId: 9,
-    ),
-    Product(
-      id: 10,
-      name: 'Pizza',
-      image: 'assets/images/pizza.jpeg',
-      description: 'Tasty pizza with cheese and tomato sauce',
-      price: 10.99,
-      sellerId: 10,
-    ),
+        id: 5,
+        name: 'spanish rice',
+        description: 'Tasty spanish rice with cheese and tomato sauce',
+        price: 10.99,
+        image: 'assets/images/spanishrice.jpeg',
+        sellerId: 5,
+        category: 5),
   ];
 
 <<<<<<< HEAD
@@ -212,17 +175,13 @@ class _WelcomePagesState extends State<WelcomePage> {
               const SizedBox(height: 10),
               Text(
                 'Description: ${product.description}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              Text(
-                'Price: \$${product.price}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                )
-              ),
+              Text('Price: \$${product.price}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
             ],
           ),
           actions: [
@@ -286,16 +245,15 @@ class _WelcomePagesState extends State<WelcomePage> {
                   onPressed: () {
                     // Handle buy button click
                     Navigator.pushNamedAndRemoveUntil(
-                             context, '/mainpagecategory', (route) => false);
+                        context, '/mainpagecategory', (route) => false);
                   },
                   child: Text(
                     'buy now',
                     style: TextStyle(
-                      color: AppColors.textWhitecolor,
-                      fontSize: 10.0,
-                      fontFamily: 'roboto',
-                      fontWeight: FontWeight.bold
-                    ),
+                        color: AppColors.textWhitecolor,
+                        fontSize: 10.0,
+                        fontFamily: 'roboto',
+                        fontWeight: FontWeight.bold),
                   ),
                 )
               ],
