@@ -51,7 +51,8 @@ class _HomePageState extends State<HomePage> {
       _checkUserVerification();
     }
 
-    print(user?.displayName);
+    print(user);
+    print(_isVerified);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -102,17 +103,23 @@ class _HomePageState extends State<HomePage> {
                 height: 20,
               ),
               SizedBox(
-                  height: 50,
-                  width: 200,
-                  child: _isVerified
-                      ? MyElevatedButton(context, 50.0, "next", () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
-                        }, loading)
-                      : MyElevatedButton(context, 50.0, "Verify", () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/verifyemail', (route) => false);
-                        }, loading)),
+                height: 50,
+                width: 200,
+                child: _isVerified
+                    ? MyElevatedButton(context, 50.0, "next", () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/welcomepage', (route) => false);
+                      }, loading)
+                    : user != null
+                        ? MyElevatedButton(context, 50.0, "Verify", () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/verifyemail', (route) => false);
+                          }, loading)
+                        : MyElevatedButton(context, 50.0, "login", () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/login', (route) => false);
+                          }, loading),
+              )
             ],
           ),
         ),
