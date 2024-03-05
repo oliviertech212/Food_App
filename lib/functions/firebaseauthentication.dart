@@ -68,4 +68,9 @@ class FirebaseAuthenticationService {
     final user = auth.currentUser;
     return user;
   }
+
+  Future<bool> isEmailVerified() async {
+    final user = auth.currentUser;
+    return user!.emailVerified;
+  }
 }

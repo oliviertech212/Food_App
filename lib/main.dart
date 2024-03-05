@@ -21,12 +21,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
 
   // Set up database and platform-specific initializations
   try {
+    await dotenv.load(fileName: ".env");
+
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
@@ -44,7 +47,9 @@ Future<void> main() async {
         FirebaseAuthenticationService();
     await firebaseAuthenticationService.initialize();
 
-    print("database initialized${databaseService.database}");
+    // await FirebaseAuthenticationService.signOut();
+
+    print("database initialized${databaseService.database} ");
 
     // Start the application
     runApp(const FoodApp());
@@ -79,7 +84,7 @@ class _FoodAppState extends State<FoodApp> {
         '/verification': (context) => const verification(),
         '/new-password': (context) => const NewPassword(),
         '/verifyemail': (context) => const VerifyEmailScreen(),
-        'welcomepage': (context) => const MyWelcomePage(),
+        '/welcomepage': (context) => const MyWelcomePage(),
       },
     );
   }

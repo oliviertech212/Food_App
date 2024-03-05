@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -43,8 +44,8 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCnFCILiP2ovR_A4TGx19RAkJZB5G2M0Ng',
+  static FirebaseOptions web = FirebaseOptions(
+    apiKey: dotenv.get('API_KEY1'),
     appId: '1:233051706951:web:44a2ed758f600f90784362',
     messagingSenderId: '233051706951',
     projectId: 'foodapp-11910',
@@ -53,16 +54,16 @@ class DefaultFirebaseOptions {
     measurementId: 'G-9YCS8L4JNY',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA25UqktWD6E_vXu9ZrNHX_wibSvws3ZSc',
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.get('API_KEY2'),
     appId: '1:233051706951:android:b695b0b4f02d80ed784362',
     messagingSenderId: '233051706951',
     projectId: 'foodapp-11910',
     storageBucket: 'foodapp-11910.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDmPyJgtgtp9ruLkQs1jIcApwbX9P9wFYs',
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.get('API_KEY3'),
     appId: '1:233051706951:ios:a36d3000630a4158784362',
     messagingSenderId: '233051706951',
     projectId: 'foodapp-11910',
@@ -70,8 +71,8 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.foodapp',
   );
 
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDmPyJgtgtp9ruLkQs1jIcApwbX9P9wFYs',
+  static FirebaseOptions macos = FirebaseOptions(
+    apiKey: dotenv.get('API_KEY4'),
     appId: '1:233051706951:ios:2beeb2f5f63bec84784362',
     messagingSenderId: '233051706951',
     projectId: 'foodapp-11910',

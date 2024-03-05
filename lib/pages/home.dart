@@ -23,21 +23,20 @@ class _HomePageState extends State<HomePage> {
     // print(
     //     'Font Weight: ${style?.fontWeight}  ${style1?.fontWeight}  ${style2?.fontWeight}  ${style3?.fontWeight} ');
     bool loading = false;
-    // final FirebaseAuthenticationService _auth = FirebaseAuthenticationService();
-    bool _isVerified = false;
+    final FirebaseAuthenticationService auth = FirebaseAuthenticationService();
+    bool _isVerified;
     bool islogedIn = false;
     final _auth = FirebaseAuth.instance;
+
     final user = _auth.currentUser;
 
     void _checkUserVerification() async {
       if (user != null) {
         setState(() {
           islogedIn = true;
-          _isVerified = user.emailVerified;
         });
-      } else {
+      } else if (user == null) {
         setState(() {
-          _isVerified = false;
           islogedIn = false;
         });
 
@@ -51,8 +50,9 @@ class _HomePageState extends State<HomePage> {
       _checkUserVerification();
     }
 
-    print(user);
-    print(_isVerified);
+    // print(_isVerified);
+    // print(user);
+    // print(islogedIn);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -105,12 +105,12 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 50,
                 width: 200,
-                child: _isVerified
+                child: user != null && user.emailVerified
                     ? MyElevatedButton(context, 50.0, "next", () {
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/welcomepage', (route) => false);
                       }, loading)
-                    : user != null
+                    : (user != null && !user.emailVerified)
                         ? MyElevatedButton(context, 50.0, "Verify", () {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/verifyemail', (route) => false);
