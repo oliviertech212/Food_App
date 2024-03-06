@@ -2,9 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
+import 'package:foodapp/pages/mainpage.category.dart';
+import 'package:foodapp/pages/welcome_screen.dart';
 import 'package:foodapp/services/database_service.dart';
+import 'package:foodapp/pages/verifyemail.dart';
 import 'package:foodapp/utils/theme.dart';
 import 'package:foodapp/pages/signup.dart';
 import 'package:foodapp/pages/forgot_password.dart';
@@ -14,12 +18,19 @@ import 'package:flutter/widgets.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
 
   // Set up database and platform-specific initializations
   try {
+    await dotenv.load(fileName: ".env");
+
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
@@ -33,7 +44,13 @@ Future<void> main() async {
     await databaseService.initialize();
     await databaseService.getDatabaseVersion();
 
-    print("database initialized${databaseService.database}");
+    FirebaseAuthenticationService firebaseAuthenticationService =
+        FirebaseAuthenticationService();
+    await firebaseAuthenticationService.initialize();
+
+    // await FirebaseAuthenticationService.signOut();
+
+    print("database initialized${databaseService.database} ");
 
     // Start the application
     runApp(const FoodApp());
@@ -43,19 +60,19 @@ Future<void> main() async {
   }
 }
 
-// Future main() async {
-//   sqfliteFfiInit();
-
-//   databaseFactory = databaseFactoryFfi;
-//   runApp(const FoodApp());
-// }
-
-class FoodApp extends StatelessWidget {
+class FoodApp extends StatefulWidget {
   const FoodApp({super.key});
 
   @override
+  State<FoodApp> createState() => _FoodAppState();
+}
+
+class _FoodAppState extends State<FoodApp> {
+  // var _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // scaffoldMessengerKey: _scaffoldKey,
       theme: foodApptheme,
       title: 'welcome',
       debugShowCheckedModeBanner: false,
@@ -67,6 +84,9 @@ class FoodApp extends StatelessWidget {
         '/forgot-password': (context) => ForgotPassword(),
         '/verification': (context) => const verification(),
         '/new-password': (context) => const NewPassword(),
+        '/verifyemail': (context) => const VerifyEmailScreen(),
+        '/welcomepage': (context) => const MyWelcomePage(),
+        '/mainpagecategory': (context) => const MainpageCategoryScreen(),
       },
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:foodapp/utils/colors.dart';
 
-Widget MyElevatedButton(BuildContext context, height, text, click) {
+Widget MyElevatedButton(BuildContext context, height, text, click, isloading) {
   return SizedBox(
       height: height as double,
       // width: width,
@@ -16,15 +16,19 @@ Widget MyElevatedButton(BuildContext context, height, text, click) {
             borderRadius: BorderRadius.circular(50),
           ),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: AppColors.textWhitecolor,
-            fontSize: 18,
-          ).copyWith(
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        child: isloading
+            ? CircularProgressIndicator(
+                color: AppColors.textWhitecolor,
+              )
+            : Text(
+                text,
+                style: TextStyle(
+                  color: AppColors.textWhitecolor,
+                  fontSize: 30,
+                ).copyWith(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
       ));
 }

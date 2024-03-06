@@ -1,7 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:foodapp/models/users.dart';
-import 'package:foodapp/pages/welcome_screen.dart';
-import 'package:foodapp/services/users.dart';
+import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/widgets/ourbrandname.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
@@ -18,28 +17,46 @@ class MySignupPage extends StatefulWidget {
 }
 
 class _MySignupPageState extends State<MySignupPage> {
+  final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
-  final _useremailController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool loading = false;
 
-  //- final userDB = DatabaseService();
-
-  @override
-  void initState() {
-    if (widget.user != null) {
-      _usernameController.text = widget.user!.username!;
-      _useremailController.text = widget.user!.email;
-      _passwordController.text = widget.user!.password;
-    }
-    super.initState();
-  }
+// -firebase auth instance
+  final FirebaseAuthenticationService _auth = FirebaseAuthenticationService();
 
   @override
   void dispose() {
     _usernameController.dispose();
-    _useremailController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void _signUp() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String username = _usernameController.text;
+    String confirmPassword = _confirmPasswordController.text;
+
+    setState(() {
+      loading = true;
+    });
+
+    User? user =
+        await _auth.signUpWithEmailAndPassword(email, password, username);
+    if (user != null) {
+      loading = false;
+      print('User created');
+      Navigator.pushNamed(context, '/verification');
+    } else {
+      loading = false;
+      print('User not created');
+      Navigator.pushNamed(context, '/signup');
+    }
   }
 
   @override
@@ -79,6 +96,7 @@ class _MySignupPageState extends State<MySignupPage> {
             // Container with rounded corners
             SingleChildScrollView(
               child: Container(
+                height: MediaQuery.of(context).size.height,
                 margin: EdgeInsets.only(top: 150),
                 decoration: BoxDecoration(
                   color: AppColors.backgroundWhite,
@@ -126,70 +144,82 @@ class _MySignupPageState extends State<MySignupPage> {
                     //   // maxLength: 8,
                     // ),
                     const SizedBox(height: 12.0),
-                    MyTextField(
-                        labelText: "UserName",
-                        inputControl: _usernameController),
-
-                    const SizedBox(height: 12.0),
-                    MyTextField(
-                        labelText: "Email",
-                        inputControl: _useremailController,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next),
-
-                    const SizedBox(height: 12.0),
-                    MyTextField(
-                        labelText: "Password",
-                        inputControl: _passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.next,
-                        maxLength: 8),
-
-                    const SizedBox(height: 12.0),
-                    MyTextField(
-                        labelText: "ConfirmPassword",
-                        inputControl: _passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.next,
-                        maxLength: 8),
-
-                    const SizedBox(height: 10.0),
-
-                    MyElevatedButton(context, 50.0, 'Never Hungry Again!',
-                        () async {
-                      // Navigator.pushNamed(context, '/signup');
-
-                      final username = _usernameController.text;
-                      final email = _useremailController.text;
-                      final password = _passwordController.text;
-
-                      // Validate user input (e.g., check passwords match, email format, etc.)
-
-                      try {
-                        final user = User(
-                          username: username,
-                          email: email,
-                          password: password,
-                        );
-
-                        //- final id = await userDB.createUser(user);
-
-                        //- userDB.getUsers();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyWelcomePage(),
+                    Form(
+                        key: _formKey,
+                        child: Column(children: [
+                          MyTextField(
+                            labelText: "UserName",
+                            inputControl: _usernameController,
+                            keyboardType: TextInputType.text,
+                            field: "username",
+                            validator: (value) {},
                           ),
-                        );
-                        //- print('User $id inserted');
-                      } catch (error) {
-                        print('Error inserting user: $error');
-                      } finally {
-                        Navigator.pushNamed(context, '/login');
-                      }
-                    }),
+
+                          const SizedBox(height: 12.0),
+                          MyTextField(
+                            labelText: "Email",
+                            inputControl: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            field: 'email',
+                            validator: (value) {},
+                          ),
+
+                          const SizedBox(height: 12.0),
+                          MyTextField(
+                            labelText: "Password",
+                            inputControl: _passwordController,
+                            obscureText: true,
+                            keyboardType: TextInputType.visiblePassword,
+                            textInputAction: TextInputAction.next,
+                            maxLength: 9,
+                            field: "password",
+                            validator: (value) {},
+                          ),
+
+                          const SizedBox(height: 12.0),
+                          MyTextField(
+                              labelText: "confirmPassword",
+                              inputControl: _confirmPasswordController,
+                              obscureText: true,
+                              keyboardType: TextInputType.visiblePassword,
+                              textInputAction: TextInputAction.next,
+                              maxLength: 9,
+                              field: "confirmPassword",
+                              validator: (value) {}),
+
+                          const SizedBox(height: 10.0),
+
+                          // MyTextField(
+                          //     labelText: "ConfirmPassword",
+                          //     inputControl: _passwordController,
+                          //     obscureText: true,
+                          //     keyboardType: TextInputType.visiblePassword,
+                          //     textInputAction: TextInputAction.next,
+                          //     maxLength: 8),
+
+                          // const SizedBox(height: 10.0),
+
+                          MyElevatedButton(context, 50.0, 'Never Hungry Again!',
+                              () async {
+                            // Navigator.pushNamed(context, '/signup');
+                            print(
+                                'Button clicked $loading ${_formKey.currentState!.validate()} ');
+
+                            if (_formKey.currentState!.validate()) {
+                              print('Form validated');
+                              _signUp();
+                            } else {
+                              print(
+                                  'Form not validated'); // Debugging print statement
+                            }
+                          }, loading),
+
+                          // const SizedBox(height: 12.0),
+                          // MyElevatedButton(context, double.infinity, 'Sign In', () {
+                          //   Navigator.pushNamed(context, '/signin');
+                          // }),
+                        ])),
 
                     const SizedBox(
                       height: 10,

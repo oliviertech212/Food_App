@@ -12,7 +12,9 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,40 +52,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       width: 2,
                     ),
                   ),
-                  // child: Column(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //   children: [
-                  //     const Text(
-                  //       'Forgot Password.',
-                  //       style: TextStyle(fontSize: 30, color: Colors.black),
-                  //       textAlign: TextAlign.center,
-                  //     ),
-                  //     const SizedBox(height: 20),
-                  //     TextFormField(
-                  //       controller: _usernameController,
-                  //       decoration: InputDecoration(
-                  //         labelText: "Enter your account email",
-                  //       ),
-                  //       keyboardType: TextInputType.emailAddress,
-                  //       textInputAction: TextInputAction.next,
-                  //     ),
-                  //     const SizedBox(height: 20),
-                  //     ElevatedButton(
-                  //       onPressed: () {
-                  //         Navigator.pushNamed(context, '/verification');
-                  //       },
-                  //       child: const Text(
-                  //         'Reset Password',
-                  //         style: TextStyle(
-                  //           color: Colors.white,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -92,19 +60,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         style: TextStyle(fontSize: 30, color: Colors.black),
                       ),
                       SizedBox(height: 20),
-                      MyTextField(
-                          labelText: "Enter your account email",
-                          inputControl: _usernameController,
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next),
-                      const SizedBox(height: 20),
-                      MyElevatedButton(
-                        context,
-                        50.0,
-                        'Reset Password',
-                        () {
-                          Navigator.pushNamed(context, '/verification');
-                        },
+                      Form(
+                        key: _formKey,
+                        child: Column(children: [
+                          MyTextField(
+                              labelText: "Enter your account email",
+                              inputControl: _usernameController,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              field: 'email',
+                              validator: (value) {}),
+                          const SizedBox(height: 20),
+                          MyElevatedButton(context, 50.0, 'Reset Password', () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Processing Data'),
+                                ),
+                              );
+
+                              Navigator.pushNamed(context, '/verification');
+                            }
+                          }, loading)
+                        ]),
                       )
                     ],
                   ),

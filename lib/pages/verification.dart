@@ -12,6 +12,7 @@ class verification extends StatefulWidget {
 
 class _verificationState extends State<verification> {
   final _verificationCodeController = TextEditingController();
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,15 +66,18 @@ class _verificationState extends State<verification> {
                     const Text('A verification has been sent to your email'),
                     const SizedBox(height: 20),
                     MyTextField(
-                        labelText: "Enter verification code",
-                        inputControl: _verificationCodeController,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        maxLength: 6),
+                      labelText: "Enter verification code",
+                      inputControl: _verificationCodeController,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      maxLength: 6,
+                      field: 'verification',
+                    ),
+
                     const SizedBox(height: 20),
                     MyElevatedButton(context, 50.0, 'Reset Password', () {
                       Navigator.pushNamed(context, '/new-password');
-                    }),
+                    }, loading),
                     // ElevatedButton(
                     //   child: const Text(
                     //     'Reset Password',
