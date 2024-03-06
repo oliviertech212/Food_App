@@ -24,7 +24,7 @@ Widget MyElevatedButton(BuildContext context, height, text, click, isloading) {
                 text,
                 style: TextStyle(
                   color: AppColors.textWhitecolor,
-                  fontSize: 18,
+                  fontSize: 30,
                 ).copyWith(
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.bold,

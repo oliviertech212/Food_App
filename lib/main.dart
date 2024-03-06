@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
+import 'package:foodapp/pages/mainpage.category.dart';
 import 'package:foodapp/pages/welcome_screen.dart';
 import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/pages/verifyemail.dart';
@@ -85,6 +86,7 @@ class _FoodAppState extends State<FoodApp> {
         '/new-password': (context) => const NewPassword(),
         '/verifyemail': (context) => const VerifyEmailScreen(),
         '/welcomepage': (context) => const MyWelcomePage(),
+        '/mainpagecategory': (context) => const MainpageCategoryScreen(),
       },
     );
   }

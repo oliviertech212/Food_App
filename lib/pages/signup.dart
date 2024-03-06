@@ -96,6 +96,7 @@ class _MySignupPageState extends State<MySignupPage> {
             // Container with rounded corners
             SingleChildScrollView(
               child: Container(
+                height: MediaQuery.of(context).size.height,
                 margin: EdgeInsets.only(top: 150),
                 decoration: BoxDecoration(
                   color: AppColors.backgroundWhite,
