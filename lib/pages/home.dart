@@ -109,7 +109,6 @@ class _HomePageState extends State<HomePage> {
                     ? MyElevatedButton(context, 50.0, "next", () {
                         Navigator.pushReplacementNamed(
                             // context, '/welcomepage', (route) => false);
-
                             context,
                             '/mainpagecategory');
                       }, loading)
@@ -123,8 +122,6 @@ class _HomePageState extends State<HomePage> {
                                 context, '/login', (route) => false);
                           }, loading),
               ),
-              
-             
             ],
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 
+
 void main() {
   runApp(WelcomePage());
 }
@@ -245,8 +246,8 @@ class _WelcomePagesState extends State<WelcomePage> {
       itemCount: products.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // number of items per row
-        crossAxisSpacing: 10, // spacing between items horizontally
-        mainAxisSpacing: 20, // spacing between items vertically
+        crossAxisSpacing: 0, // spacing between items horizontally
+        mainAxisSpacing: 0, // spacing between items vertically
       ),
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
@@ -254,12 +255,12 @@ class _WelcomePagesState extends State<WelcomePage> {
             _showProductDetails(products[index]);
           },
           child: Container(
-            margin: const EdgeInsets.only(right: 50.0),
+            margin: const EdgeInsets.only(),
             child: Column(
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40.0),
+                    borderRadius: BorderRadius.circular(20.0),
                     image: DecorationImage(
                       image: AssetImage(products[index].image),
                       fit: BoxFit.cover,
@@ -268,8 +269,8 @@ class _WelcomePagesState extends State<WelcomePage> {
                       width: 3.0,
                     ),
                   ),
-                  height: 100.0,
-                  width: 100.0,
+                  height: 90.0,
+                  width: 90.0,
                 ),
                 const SizedBox(height: 5.0),
                 Text(
@@ -284,6 +285,8 @@ class _WelcomePagesState extends State<WelcomePage> {
                 ElevatedButton(
                   onPressed: () {
                     // Handle buy button click
+                    Navigator.pushNamedAndRemoveUntil(
+                             context, '/mainpagecategory', (route) => false);
                   },
                   child: Text(
                     'buy now',
