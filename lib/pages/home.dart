@@ -107,12 +107,11 @@ class _HomePageState extends State<HomePage> {
                 width: 200,
                 child: user != null && user.emailVerified
                     ? MyElevatedButton(context, 50.0, "next", () {
-                        Navigator.pushNamedAndRemoveUntil(
+                        Navigator.pushReplacementNamed(
                             // context, '/welcomepage', (route) => false);
 
                             context,
-                            '/mainpagecategory',
-                            (route) => false);
+                            '/mainpagecategory');
                       }, loading)
                     : (user != null && !user.emailVerified)
                         ? MyElevatedButton(context, 50.0, "Verify", () {
