@@ -4,7 +4,7 @@ class Product {
   String description;
   dynamic price;
   String image;
-  String? category;
+  int category;
   String? rating;
   int? countInStock;
   String? createdAt = DateTime.now().toIso8601String();
@@ -17,7 +17,7 @@ class Product {
     required this.description,
     required this.price,
     required this.image,
-    this.category,
+    required this.category,
     required this.sellerId,
     this.rating,
     this.countInStock,

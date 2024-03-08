@@ -31,10 +31,10 @@ class _LoginPageState extends State<LoginPage> {
     User? user = await _auth.signInWithEmailAndPassword(email, password);
     if (user != null) {
       loading = false;
-      Navigator.pushNamed(context, '/home');
+      Navigator.popAndPushNamed(context, '/home');
     } else {
       loading = false;
-      Navigator.pushNamed(context, '/signup');
+      Navigator.popAndPushNamed(context, '/signup');
     }
   }
 

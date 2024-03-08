@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:foodapp/models/category.model.dart';
 import 'package:foodapp/models/users.dart';
+import 'package:foodapp/services/category_service.dart';
 import 'package:foodapp/services/users.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -49,6 +51,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligu
  Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis venenatis, quam iaculis faucibus blandit,
 sellus ut odio condimentum, elementum sem mollis, porta sapien. Aliquam at ante sed purus blandit volutpat. Vivamus ''',
     price: 3000,
+    category: category1.id,
     image:
         // "https://res.cloudinary.com/dt6rzq9tw/image/upload/v1694003963/ATLP_Champs/gqkblr12kdtq7qubz18r.jpg",
 
@@ -64,6 +67,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligu
 sellus ut odio condimentum, ''',
     price: 1500,
     image: "assets/images/pizza.jpeg",
+    category: category1.id,
     sellerId: 1);
 
 var product3 = Product(
@@ -75,6 +79,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligu
 sellus ut odio condimentum, ''',
     price: 10000,
     image: "assets/images/spanishrice.jpeg",
+    category: category1.id,
     sellerId: 1);
 
 var product4 = Product(
@@ -85,6 +90,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligu
  Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis venenatis, quam iaculis faucibus blandit,
 sellus ut odio condimentum, ''',
     price: 4000,
+    category: category4.id,
     image: "assets/images/pilaurice.jpeg",
     sellerId: 1);
 
@@ -95,443 +101,76 @@ var product5 = Product(
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligula, at mollis enim pretium in.
  Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis venenatis, quam iaculis faucibus blandit,
 sellus ut odio condimentum, ''',
-    price: 4000,
+    price: 10000,
+    category: category1.id,
     image: "assets/images/chicken.jpeg",
     sellerId: 1);
 
+var product6 = Product(
+    id: 6,
+    name: "Cabbage salad",
+    description: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligula, at mollis enim pretium in.
+ Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis venenatis, quam iaculis faucibus blandit,
+sellus ut odio condimentum, ''',
+    price: 5000,
+    category: category3.id,
+    image: "assets/images/cabbagesalad.jpeg",
+    sellerId: 1);
+
+var product7 = Product(
+    id: 7,
+    name: "Dessert1",
+    description: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligula, at mollis enim pretium in.
+ Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis venenatis, quam iaculis faucibus blandit,
+sellus ut odio condimentum, ''',
+    price: 2000,
+    image: "assets/images/Dessert1.jpeg",
+    category: category2.id,
+    sellerId: 1);
+
+var product8 = Product(
+    id: 8,
+    name: "French Fries",
+    description: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare felis ligula, at mollis enim pretium in.
+ Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis venenatis, quam iaculis faucibus blandit,
+sellus ut odio condimentum, ''',
+    price: 3000,
+    image: "assets/images/fries.jpeg",
+    category: category1.id,
+    sellerId: 1);
+
+var category1 = Categorys(
+    id: 1,
+    name: "Main Menu",
+    image: "assets/images/mainmenu.jpeg",
+    free: "Yes");
+
+var category2 = Categorys(
+    id: 2,
+    name: "Dessert Menu",
+    image: "assets/images/Dessert.jpeg",
+    free: "No");
+
+var category3 = Categorys(
+    id: 3, name: "Salad", image: "assets/images/sarad.jpeg", free: "No");
+
+var category4 = Categorys(
+    id: 4,
+    name: "Best Sales",
+    image: "assets/images/bestsales.jpeg",
+    free: "Yes");
+
 // - before reading the data on database we need to open connection to the database
-class DatabaseeServicesss {
-  Database? _database;
-
-  Future<Database> get database async {
-    if (_database != null) {
-      print('Database already exists ${_database}');
-      return _database!;
-    }
-
-    return await _initialize();
-  }
-
-  Future<String> get fullpath async {
-    const dbname = 'wedeliverfoodapp.db';
-    final path = await getDatabasesPath();
-    return join(path, dbname);
-  }
-
-  FutureOr<void> _onUpgrade(
-      Database database, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      var tableColumns =
-          await database.rawQuery('PRAGMA table_info(${UserDB().tableName});');
-
-      bool createdAtExists =
-          tableColumns.indexWhere((row) => row['name'] == 'created_at') != -1;
-      if (!createdAtExists) {
-        await database.execute(
-          'ALTER TABLE ${UserDB().tableName} ADD COLUMN created_at TEXT DEFAULT CURRENT_TIMESTAMP',
-        );
-      }
-      bool updatedAtExists =
-          tableColumns.indexWhere((row) => row['name'] == 'updated_at') != -1;
-      if (!updatedAtExists) {
-        await database.execute(
-          'ALTER TABLE ${UserDB().tableName} ADD COLUMN updated_at TEXT DEFAULT CURRENT_TIMESTAMP',
-        );
-      }
-    }
-  }
-
-  FutureOr<void> _onCreate(Database database, int version) async {
-    // Check if the table exists
-    bool hasTable = false;
-    try {
-      final result = await database.rawQuery(
-          'SELECT name FROM sqlite_master WHERE type="table" AND name="${UserDB().tableName}"');
-      hasTable = result.isNotEmpty;
-    } catch (error) {
-      print('Error checking table existence: $error');
-    }
-    if (!hasTable) {
-      print('creating usertable');
-      await UserDB().createTable(database, version);
-    }
-  }
-
-  Future<Database> _initialize() async {
-    print("initializing database...");
-
-    try {
-      final path =
-          await getApplicationDocumentsDirectory(); // Get the app's documents directory
-      final dbPath =
-          join(path.path, 'wedeliverfoodapp.db'); // Construct database path
-
-      const dbname = 'wedeliverfoodapp.db';
-      final pat = await getDatabasesPath();
-      final fullpth = join(pat, dbname);
-
-      return openDatabase(
-        join(await getDatabasesPath(), 'wedeliverfoodapp.db'),
-        version: 1,
-        onCreate: _onCreate,
-        onUpgrade: _onUpgrade,
-        singleInstance: true,
-      );
-    } catch (e) {
-      print('Error initializing database: $e');
-
-      return Future.error(e);
-    }
-  }
-
-  Future<int> getDatabaseVersion() async {
-    final db = await database;
-    final result = await db.rawQuery('PRAGMA user_version;');
-    final mydb = await db.rawQuery(
-        'SELECT name FROM sqlite_master WHERE type="table" AND name="${UserDB().tableName}"');
-
-    print('Table exists: ${mydb.first.values.first} ');
-
-    if (mydb.isNotEmpty && mydb.first.values.isNotEmpty) {
-      final admin = await db.rawQuery(
-          '''SELECT * FROM ${mydb.first.values.first} WHERE id = 1  ''');
-      if (mydb.isNotEmpty && mydb.first.values.isNotEmpty) {
-        final admin = await db.rawQuery(
-            '''SELECT * FROM ${mydb.first.values.first} WHERE id = 1''');
-        if (admin.isNotEmpty) {
-          print('Table exists: ${mydb.first.values.first} admin ${admin[0]}');
-          final producttable = await db.rawQuery(
-              '''SELECT name FROM sqlite_master WHERE type="table" AND name="${ProductTable().tableName}"''');
-          if (producttable.isNotEmpty) {
-            print('Product table exists: ${producttable.first.values.first}');
-            // try {
-            //   await db.execute('DROP TABLE IF EXISTS productstable');
-            //   print("Deleting");
-            // } catch (e) {
-            //   print("Error: $e");
-            // }
-
-            // await ProductTable().insertProduct(product1);
-            // await ProductTable().insertProduct(product2);
-          } else {
-            try {
-              print("Product table does not exist ");
-              // await ProductTable().createTable(db);
-            } catch (error) {
-              print('Error creating product table: $error');
-            }
-          }
-        } else {
-          try {
-            await db.execute(
-                '''INSERT INTO ${mydb.first.values.first} (id, username, email, password) VALUES(1, 'oliviertech', 'oliviertech@yopmail.com', 'test12345')''');
-            print('Admin inserted successfully.');
-          } catch (e) {
-            print('Error inserting admin: $e');
-          }
-        }
-      }
-    } else if (result.isNotEmpty && result.first.values.isNotEmpty) {
-      return result.first.values.first as int;
-    }
-    return 0;
-  }
-}
-
-class DatabaseService1 {
-  Database? _database;
-
-  // Database? get database => _database;
-
-  Future<Database> get database async {
-    if (_database != null) {
-      print('Database already exists ${_database}');
-      return _database!;
-    }
-
-    return await initialize();
-  }
-  // Future<Database> get database async {
-  //   // if (_database != null) {
-  //   print('Database already exists ${_database}');
-  //   return _database!;
-  //   // }
-
-  //   // return await initialize();
-  // }
-
-  Future<void> initState() async {
-    // Moved initialize() to initState()
-    if (_database == null) {
-      await initialize();
-    }
-  }
-
-  Future initialize() async {
-    // Get the database path
-    // final path = await getDatabasesPath();
-    // final dbPath = join(path, 'wedeliverfoodapp1.db');
-
-    final path =
-        await getApplicationDocumentsDirectory(); // Get the app's documents directory
-    final dbPath = join(path.path, 'wedeliverfoodapp.db');
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String dir = documentsDirectory.path + "/ApplicationFolder";
-    String p = join(dir, "myDatabase.db");
-
-    // Open the database connection and handle errors
-    try {
-      _database = await openDatabase(
-        // join(await getDatabasesPath(), 'wedeliverfoodapp.db'),
-        // dbPath,
-        p,
-        version: 2, // Adjust version if needed for schema changes
-        onCreate: _onCreate,
-        onUpgrade: _onUpgrade,
-        singleInstance: true,
-      );
-    } catch (error) {
-      print('Error opening database on initializer : $error');
-      // Handle other potential errors gracefully
-    }
-    // Create tables if necessary
-    // await _createTables();
-  }
-
-  Future<void> _onCreate(Database db, int version) async {
-    // Create User and Product tables
-    await UserDB().createTable(db, version);
-    await ProductTable().createTable(db, version);
-
-    // Check for user existence and create if necessary
-    final userExists = await _userExists();
-    print("userexist${userExists}");
-    if (!userExists) {
-      await insertAdmin();
-    }
-  }
-
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Handle schema upgrade logic if necessary
-  }
-
-  Future<void> _createTables() async {
-    if (_database == null) {
-      throw Exception('Database not initialized on create table');
-    }
-
-    final userTableExists = await _userTableExists();
-    if (!userTableExists) {
-      await UserDB()
-          .createTable(_database!, 1); // Assuming no schema changes yet
-    } else {
-      final user = await getUsers();
-      if (user.isEmpty) {
-        await insertAdmin();
-      }
-      // await _database!.execute('DROP TABLE IF EXISTS ${UserDB().tableName}');
-
-      print('Table userstable already exists.');
-    }
-
-    final productTableExists = await _productTableExists();
-    if (!productTableExists) {
-      await ProductTable()
-          .createTable(_database!, 1); // Assuming no schema changes yet
-    } else {
-      final product = await getAllproduct();
-      if (product.isEmpty) {
-        await insertProducts();
-      }
-      // await _database!.execute('DROP TABLE IF EXISTS productstable');
-
-      print('Table productstable already exists ffff.${product}');
-    }
-  }
-
-  Future<bool> _userTableExists() async {
-    if (_database == null) {
-      throw Exception('Database not initialized ont<ble exist');
-    }
-
-    final result = await _database!.rawQuery(
-      '''SELECT 1 FROM sqlite_master WHERE type="table" AND name="${UserDB().tableName}"''',
-    );
-    return result.isNotEmpty;
-  }
-
-  Future<bool> _productTableExists() async {
-    if (_database == null) {
-      throw Exception('Database not initialized');
-    }
-
-    final result = await _database!.rawQuery(
-      '''SELECT 1 FROM sqlite_master WHERE type="table" AND name="${ProductTable().tableName}"''',
-    );
-    return result.isNotEmpty;
-  }
-
-  Future<bool> _userExists() async {
-    if (_database == null) {
-      throw Exception('Database not initialized');
-    }
-
-    final result = await _database!.rawQuery(
-      '''SELECT 1 FROM ${UserDB().tableName} WHERE id = 1''',
-    );
-    print(" user exist ${result.first}");
-    return result.isNotEmpty;
-  }
-
-  Future<void> insertAdmin() async {
-    if (_database == null) {
-      throw Exception('Database not initialized on insert admin');
-    }
-
-    try {
-      await _database!.execute(
-        '''INSERT INTO ${UserDB().tableName} (id, username, email, password) VALUES(1, 'oliviertech', 'oliviertech@yopmail.com', 'test12345')''',
-      );
-      print('Admin inserted successfully.');
-    } catch (error) {
-      print('Error inserting admin: $error');
-    }
-  }
-
-  Future<void> insertProducts() async {
-    if (_database == null) {
-      throw Exception('Database not initialized on insert products');
-    }
-
-    try {
-      await insertProduct(product1);
-      print('Product 1 inserted successfully.');
-
-      await insertProduct(product2);
-      await insertProduct(product3);
-      await insertProduct(product4);
-      await insertProduct(product5);
-      print('Product 2 inserted successfully.');
-
-      print('All products inserted successfully.');
-    } catch (error) {
-      print('Error inserting products: $error');
-    }
-  }
-
-  Future<int> createUser(User user) async {
-    try {
-      if (_database == null) {
-        throw Exception('Database not initialized on create user');
-      }
-      final data = await _database!.insert(
-        ProductTable().tableName,
-        user.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      print('Data  on insert $data');
-      return data;
-    } catch (error) {
-      print('Error inserting user: $error');
-      return -1;
-    }
-  }
-
-  Future<List<User>> getUsers() async {
-    if (_database == null) {
-      throw Exception('on getuseDatabase not initialized on get users');
-    }
-    final List<Map<String, dynamic>> maps =
-        await _database!.query(UserDB().tableName);
-    final users = await _database!.rawQuery(
-        '''SELECT * FROM ${UserDB().tableName} ORDER BY email DESC''');
-
-    print('Users $users');
-
-    // return users.map((user) => User.fromJson(user)).toList();
-    return List.generate(maps.length, (i) {
-      return User(
-        username: maps[i]['username'],
-        email: maps[i]['email'],
-        id: maps[i]['id'],
-        password: maps[i]['password'],
-      );
-    });
-    // map fetched user s fo our user model
-  }
-
-  Future<int> insertProduct(Product product) async {
-    try {
-      if (_database == null) {
-        throw Exception('Database not initialized on insert product');
-      }
-
-      final data = await _database!.insert(
-        ProductTable().tableName,
-        product.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      print('Data on insert $data');
-      return data;
-    } catch (error) {
-      print('Error inserting product: $error');
-      return -1;
-    }
-  }
-
-  Future<List<Product>> getAllproduct() async {
-    try {
-      if (_database == null) {
-        throw Exception('Database not initialized on get all products');
-      }
-      final List<Map<String, Object?>> productsMaps =
-          await _database!.query(ProductTable().tableName);
-      print("products date${productsMaps}");
-
-      // Convert the list of each dog's fields into a list of `Dog` objects.
-      return [
-        for (final {
-              'id': id as int,
-              'name': name as String,
-              'price': price as dynamic,
-              'description': description as String,
-              'category': category as dynamic,
-              'countInStock': countInStock as dynamic,
-              'sellerId': sellerId as dynamic,
-              'createdAt': createdAt as dynamic,
-              'updatedAt': updatedAt as dynamic,
-              'image': image as String
-            } in productsMaps)
-          Product(
-              id: id,
-              name: name,
-              price: price,
-              description: description,
-              sellerId: sellerId,
-              image: image)
-      ];
-    } catch (e) {
-      print("Error while getting product $e");
-      return e as dynamic;
-    }
-  }
-
-  Future<int> getDatabaseVersion() async {
-    final db = await _database;
-    final result = await db!.rawQuery('PRAGMA user_version;');
-    if (result.isNotEmpty && result.first.values.isNotEmpty) {
-      print("Database version: ${result.first.values.first}");
-      return result.first.values.first as int;
-    }
-    return 0;
-  }
-}
 
 class DatabaseService {
   Database? _database;
   Future<Database> get database async {
     if (_database != null) {
       print('Database already exists ${_database}');
+
       return _database!;
     }
 
@@ -609,18 +248,18 @@ class DatabaseService {
 
       bool createdAtExists =
           tableColumns.indexWhere((row) => row['name'] == 'created_at') != -1;
-      if (!createdAtExists) {
-        await database.execute(
-          'ALTER TABLE ${UserDB().tableName} ADD COLUMN created_at TEXT DEFAULT CURRENT_TIMESTAMP',
-        );
-      }
-      bool updatedAtExists =
-          tableColumns.indexWhere((row) => row['name'] == 'updated_at') != -1;
-      if (!updatedAtExists) {
-        await database.execute(
-          'ALTER TABLE ${UserDB().tableName} ADD COLUMN updated_at TEXT DEFAULT CURRENT_TIMESTAMP',
-        );
-      }
+      // if (!createdAtExists) {
+      //   await database.execute(
+      //     'ALTER TABLE ${UserDB().tableName} ADD COLUMN created_at TEXT DEFAULT CURRENT_TIMESTAMP',
+      //   );
+      // }
+      // bool updatedAtExists =
+      //     tableColumns.indexWhere((row) => row['name'] == 'updated_at') != -1;
+      // if (!updatedAtExists) {
+      //   await database.execute(
+      //     'ALTER TABLE ${UserDB().tableName} ADD COLUMN updated_at TEXT DEFAULT CURRENT_TIMESTAMP',
+      //   );
+      // }
     }
   }
 
@@ -629,14 +268,20 @@ class DatabaseService {
     bool hasTable = false;
     bool hasproducttable = false;
     bool hasadmin = false;
+    bool hasCategory = false;
+    bool hascategorydata = false;
+
     try {
       final result = await database.rawQuery(
           'SELECT name FROM sqlite_master WHERE type="table" AND name="${UserDB().tableName}"');
+
       hasTable = result.isNotEmpty;
       if (hasTable) {
         final result = await database.rawQuery(
           '''SELECT 1 FROM ${UserDB().tableName} WHERE id = 1''',
         );
+        //  - _database!.execute('DROP TABLE IF EXISTS ${UserDB().tableName}');
+
         print(" user exist ${result.first}");
         if (result.isNotEmpty) {
           hasadmin = true;
@@ -647,13 +292,53 @@ class DatabaseService {
         }
       }
 
+      final resultcategory = await database.rawQuery(
+        '''SELECT 1 FROM sqlite_master WHERE type="table" AND name="${CategoryTable().tableName}"''',
+      );
+
+      hasCategory = resultcategory.isNotEmpty;
+
+      if (hasCategory) {
+        final List<Map<String, Object?>> categorydata =
+            await database.query(CategoryTable().tableName);
+
+        if (categorydata.isEmpty) {
+          await database.insert(
+            CategoryTable().tableName,
+            category1.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          await database.insert(
+            CategoryTable().tableName,
+            category2.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          await database.insert(
+            CategoryTable().tableName,
+            category3.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          await database.insert(
+            CategoryTable().tableName,
+            category4.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        } else {
+          hascategorydata = true;
+        }
+      } else {
+        print("creating category table");
+        await CategoryTable().createTable(database, version);
+      }
+
       final resultproduct = await database.rawQuery(
         '''SELECT 1 FROM sqlite_master WHERE type="table" AND name="${ProductTable().tableName}"''',
       );
+      //- _database!.execute('DROP TABLE IF EXISTS ${CategoryTable().tableName}');
       hasproducttable = resultproduct.isNotEmpty;
-      if (hasadmin && !hasproducttable) {
+      if (hasadmin && hasCategory && !hasproducttable) {
         await ProductTable().createTable(database, version);
-      } else if (hasadmin && hasproducttable) {
+      } else if (hasadmin && hasCategory && hasproducttable) {
         print("insertinf product");
         await database.insert(
           ProductTable().tableName,
@@ -689,6 +374,11 @@ class DatabaseService {
     if (!hasTable) {
       print('creating usertable');
       await UserDB().createTable(database, version);
+    }
+
+    if (!hasCategory) {
+      print('creating categorytable');
+      await CategoryTable().createTable(database, version);
     }
 
     if (!hasproducttable) {
@@ -795,12 +485,60 @@ class DatabaseService {
               id: id,
               name: name,
               price: price,
+              category: category,
               description: description,
               sellerId: sellerId,
               image: image)
       ];
     } catch (e) {
       print("Error while getting product $e");
+      return e as dynamic;
+    }
+  }
+
+  Future<List<Categorys>> getCategories() async {
+    final db = await database;
+
+    try {
+      final List<Map<String, dynamic>> categories =
+          await db.query(CategoryTable().tableName);
+
+      if (categories.isEmpty) {
+        await db.insert(
+          CategoryTable().tableName,
+          category1.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await db.insert(
+          CategoryTable().tableName,
+          category2.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await db.insert(
+          CategoryTable().tableName,
+          category3.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        await db.insert(
+          CategoryTable().tableName,
+          category4.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+
+      print("categories${categories}");
+
+      return [
+        for (final {
+              'id': id as dynamic,
+              'name': name as String,
+              'image': image as String,
+              'free': free as String,
+            } in categories)
+          Categorys(id: id, name: name, image: image, free: free)
+      ];
+    } catch (e) {
+      print("Error while getting categories $e");
       return e as dynamic;
     }
   }
