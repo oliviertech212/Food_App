@@ -217,6 +217,10 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
   Future<List<Categorys>>? futureCategory;
   final table = DatabaseService();
 
+  final searchinput = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  dynamic text;
+
   @override
   void initState() {
     super.initState();
@@ -226,6 +230,12 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
   void fetchCategories() async {
     setState(() {
       futureCategory = table.getCategories();
+    });
+  }
+
+  settext() {
+    setState(() {
+      text = searchinput.text;
     });
   }
 
@@ -267,6 +277,54 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
                 ],
               ),
             ),
+            bottom: PreferredSize(
+              preferredSize:
+                  Size.fromHeight(60.0), // You can adjust this value as needed
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 250.0,
+                  height: 40.0,
+                  child: Form(
+                    child: TextFormField(
+                      // controller: searchinput,
+                      onChanged: (value) {
+                        setState(() {
+                          text = value;
+                        });
+                      },
+                      autocorrect: true,
+                      style: TextStyle(
+                          color: Colors.black), // This will make the text black
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor:
+                            Colors.white, // This will make the background white
+                        prefixIcon: Icon(Icons.search,
+                            color:
+                                Colors.black), // This will add the search icon
+                        hintText: "Search",
+                        hintStyle: TextStyle(
+                            color: Colors
+                                .black), // This will make the hint text black
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black), // This will make the border black
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                          borderSide: BorderSide(
+                              color: Theme.of(context)
+                                  .primaryColor), // This will make the border color change to primary color on focus
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           SliverToBoxAdapter(
             child: Column(
@@ -294,20 +352,11 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
                         color: AppColors.textWhitecolor,
                       ),
                 ),
-                SizedBox(
-                  width: 250.0,
-                  height: 40.0,
-                  child: Form(
-                    child: TextFormField(
-                      autocorrect: true,
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
+                Text(
+                  "${text ?? ' '}",
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: AppColors.textWhitecolor,
                       ),
-                    ),
-                  ),
                 ),
               ],
             ),
@@ -351,142 +400,3 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
     );
   }
 }
-
-// class MainpageCategoryScreen extends StatefulWidget {
-//   const MainpageCategoryScreen({Key? key}) : super(key: key);
-
-//   @override
-//   State<MainpageCategoryScreen> createState() => _MainpageCategoryScreenState();
-// }
-
-// class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
-//   Future<List<Categorys>>? futureCategory;
-//   final table = DatabaseService();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     table.initialize().then((_) => fetchCategories());
-//   }
-
-//   void fetchCategories() async {
-//     setState(() {
-//       futureCategory = table.getCategories();
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Theme.of(context).primaryColor,
-//       appBar: AppBar(
-//         backgroundColor: Theme.of(context).primaryColor,
-//         centerTitle: false,
-//         title: Container(
-//           // color: Colors.white,
-//           width: double.infinity,
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               IconButton(
-//                 icon: const Icon(Icons.menu, color: Colors.white),
-//                 onPressed: () {
-//                   // Navigator.pop(context);
-//                 },
-//               ),
-//               CircleAvatar(
-//                 radius: 20,
-//                 backgroundColor: Colors.white,
-//                 child: IconButton(
-//                   splashColor: Colors.black,
-//                   highlightColor: const Color.fromARGB(255, 61, 59, 59),
-//                   icon: const Icon(Icons.shopping_basket, color: Colors.black),
-//                   onPressed: () {
-//                     // Navigator.pop(context);
-//                   },
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.start,
-//           children: [
-//             // Add your top content here (Welcome text, etc.)
-
-//             Text(
-//               "Welcome",
-//               style: TextStyle(
-//                 color: AppColors.textWhitecolor,
-//                 fontSize: 30,
-//                 fontWeight: FontWeight.bold,
-//               ).copyWith(
-//                 fontFamily: 'Roboto',
-//               ),
-//             ),
-//             Text(
-//               "  Homemade meals prepared with love.  ",
-//               style: Theme.of(context).textTheme.bodyText1!.copyWith(
-//                     color: AppColors.textWhitecolor,
-//                   ),
-//             ),
-//             Text(
-//               "  Richest ingredients. ",
-//               style: Theme.of(context).textTheme.bodyText1!.copyWith(
-//                     color: AppColors.textWhitecolor,
-//                   ),
-//             ),
-//             SizedBox(
-//               width: 250.0,
-//               height: 40.0,
-//               child: Form(
-//                   child: TextFormField(
-//                 autocorrect: true,
-//                 decoration: InputDecoration(
-//                     hintText: "Search",
-//                     border: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(50))),
-//               )),
-//             ),
-
-//             Container(
-//               // color: AppColors.backgroundWhite,
-//               margin: EdgeInsets.only(top: 10),
-//               decoration: BoxDecoration(
-//                 color: AppColors.backgroundWhite,
-//                 borderRadius: const BorderRadius.vertical(
-//                   top: Radius.circular(20), // Small rounded corners at the top
-//                 ),
-//               ),
-//               child: FutureBuilder<List<Categorys>>(
-//                 future: futureCategory,
-//                 builder: (context, snapshot) {
-//                   if (snapshot.connectionState == ConnectionState.waiting) {
-//                     return const Center(child: CircularProgressIndicator());
-//                   } else if (snapshot.hasError) {
-//                     return Text('Error: ${snapshot.error}');
-//                   } else {
-//                     final data = snapshot.data;
-//                     if (data == null || data.isEmpty) {
-//                       return const Text('There are no categories');
-//                     }
-//                     return ListView.builder(
-//                       shrinkWrap: true,
-//                       physics: NeverScrollableScrollPhysics(),
-//                       itemCount: data.length,
-//                       itemBuilder: (context, index) {
-//                         return CategoryCard(category: data[index]);
-//                       },
-//                     );
-//                   }
-//                 },
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
