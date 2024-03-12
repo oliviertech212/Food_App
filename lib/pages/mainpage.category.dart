@@ -220,6 +220,8 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
   final searchinput = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   dynamic text;
+  String searchText = '';
+  List<Categorys> filteredCategories = [];
 
   @override
   void initState() {
@@ -387,6 +389,15 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: data.length,
                       itemBuilder: (context, index) {
+                        if (text != null && text != '') {
+                          if (data[index]
+                              .name
+                              .toLowerCase()
+                              .contains(text.toLowerCase())) {
+                            return CategoryCard(category: data[index]);
+                          }
+                          return Container();
+                        }
                         return CategoryCard(category: data[index]);
                       },
                     );
