@@ -19,142 +19,93 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePagesState extends State<WelcomePage> {
   final List<Product> products = [
     Product(
-      id: 1,
-      name: 'Pizza',
-      image: 'assets/images/pizza.jpeg',
-      description: 'Tasty pizza with cheese and tomato sauce',
-      price: 10.99,
-      category: 1,
-      sellerId: 1,
-    ),
+        id: 1,
+        name: 'Pizza',
+        image: 'assets/images/pizza.jpeg',
+        description: 'Tasty pizza with cheese and tomato sauce',
+        price: 10.99,
+        sellerId: 1,
+        category: 3),
     Product(
       id: 2,
+      category: 2,
       name: 'chicken',
       image: 'assets/images/chicken.jpeg',
       description: 'Tasty chicken with cheese and tomato sauce',
       price: 10.99,
-      category: 2,
       sellerId: 2,
     ),
     Product(
       id: 3,
+      category: 4,
       name: 'chicken wrap',
       image: 'assets/images/chickenwrap.jpeg',
       description: 'Tasty chicken wrap with cheese and tomato sauce',
       price: 10.99,
-      category: 3,
       sellerId: 3,
     ),
     Product(
       id: 4,
+      category: 3,
       name: 'Sushi',
       image: 'assets/images/pilaurice.jpeg',
       description: 'Tasty sushi with cheese and tomato sauce',
       price: 10.99,
-      category: 4,
       sellerId: 4,
     ),
     Product(
-        id: 5,
+      id: 5,
+      category: 4,
+      name: 'spanish rice',
+      description: 'Tasty spanish rice with cheese and tomato sauce',
+      price: 10.99,
+      image: 'assets/images/spanishrice.jpeg',
+      sellerId: 5,
+    ),
+    Product(
+        id: 6,
+        name: 'chicken',
+        image: 'assets/images/chicken.jpeg',
+        description: 'Tasty chicken with cheese and tomato sauce',
+        price: 10.99,
+        sellerId: 6,
+        category: 2),
+    Product(
+      id: 7,
+      category: 2,
+      name: 'chicken wrap',
+      image: 'assets/images/chickenwrap.jpeg',
+      description: 'Tasty chicken wrap with cheese and tomato sauce',
+      price: 10.99,
+      sellerId: 7,
+    ),
+    Product(
+      id: 8,
+      category: 4,
+      name: 'Sushi',
+      image: 'assets/images/pilaurice.jpeg',
+      description: 'Tasty sushi with cheese and tomato sauce',
+      price: 10.99,
+      sellerId: 8,
+    ),
+    Product(
+        id: 9,
         name: 'spanish rice',
         description: 'Tasty spanish rice with cheese and tomato sauce',
         price: 10.99,
         image: 'assets/images/spanishrice.jpeg',
-        sellerId: 5,
-        category: 5),
+        sellerId: 9,
+        category: 4),
+    Product(
+        id: 10,
+        name: 'Pizza',
+        image: 'assets/images/pizza.jpeg',
+        description: 'Tasty pizza with cheese and tomato sauce',
+        price: 10.99,
+        sellerId: 10,
+        category: 3),
   ];
 
-<<<<<<< HEAD
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _handleScroll() {
-    setState(() {
-      _currentIndex = (_pageController.page ?? 0).round();
-    });
-  }
-
-  Widget _buildCategoryList({required List<Product> products}) {
-    return SizedBox(
-      height: 200, // Adjust the height as needed
-      child: ListView.builder(
-        controller: _pageController,
-        itemCount: products.length,
-        reverse: true,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: AppColors.bgSecondary,
-                    title: Text(products[index].name),
-                    content: Column(
-                      children: <Widget>[
-                        Image.asset(products[index].image),
-                        Text('Name: ${products[index].name}'),
-                        Text('Price: ${products[index].price}'),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Close'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Image.asset(
-                    products[index].image,
-                    fit: BoxFit.scaleDown,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Name: ${products[index].name},',
-                    style: TextStyle(
-                      color: AppColors.textPrimarycolor,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    'Price: ${products[index].price},',
-                    style: TextStyle(
-                      color: AppColors.textPrimarycolor,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Price: ${products[index].price}',
-                    style: TextStyle(
-                      color: AppColors.textWhitecolor,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-=======
   void _showProductDetails(Product product) {
     showDialog(
       context: context,
@@ -170,7 +121,6 @@ class _WelcomePagesState extends State<WelcomePage> {
                 product.image,
                 height: 90,
                 width: 90,
->>>>>>> b761b37 (updating)
               ),
               const SizedBox(height: 10),
               Text(
@@ -205,8 +155,8 @@ class _WelcomePagesState extends State<WelcomePage> {
       itemCount: products.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // number of items per row
-        crossAxisSpacing: 0, // spacing between items horizontally
-        mainAxisSpacing: 0, // spacing between items vertically
+        crossAxisSpacing: 10, // spacing between items horizontally
+        mainAxisSpacing: 20, // spacing between items vertically
       ),
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
@@ -214,12 +164,12 @@ class _WelcomePagesState extends State<WelcomePage> {
             _showProductDetails(products[index]);
           },
           child: Container(
-            margin: const EdgeInsets.only(),
+            margin: const EdgeInsets.only(right: 50.0),
             child: Column(
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(40.0),
                     image: DecorationImage(
                       image: AssetImage(products[index].image),
                       fit: BoxFit.cover,
@@ -228,8 +178,8 @@ class _WelcomePagesState extends State<WelcomePage> {
                       width: 3.0,
                     ),
                   ),
-                  height: 90.0,
-                  width: 90.0,
+                  height: 100.0,
+                  width: 100.0,
                 ),
                 const SizedBox(height: 5.0),
                 Text(
@@ -244,8 +194,6 @@ class _WelcomePagesState extends State<WelcomePage> {
                 ElevatedButton(
                   onPressed: () {
                     // Handle buy button click
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/mainpagecategory', (route) => false);
                   },
                   child: Text(
                     'buy now',
@@ -266,27 +214,6 @@ class _WelcomePagesState extends State<WelcomePage> {
     return Scaffold(
       backgroundColor: AppColors.bgprimaryColor,
       body: SafeArea(
-<<<<<<< HEAD
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.menu,
-                        color: AppColors.textWhitecolor,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        print(' tapped');
-                        //if you tapped on menu icon it will take you to the login page
-                        Navigator.pushNamed(context, '/login');
-                      },
-=======
         child: Column(
           children: [
             Container(
@@ -299,7 +226,6 @@ class _WelcomePagesState extends State<WelcomePage> {
                       Icons.menu,
                       color: AppColors.textWhitecolor,
                       size: 30,
->>>>>>> b761b37 (updating)
                     ),
                     onPressed: () {
                       print(' tapped');
@@ -437,57 +363,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                       topRight: Radius.circular(30),
                     ),
                   ),
-<<<<<<< HEAD
-                ),
-                child: _buildCategoryList(
-                  products: [
-                    Product(
-                        id: 1,
-                        name: 'Pizza',
-                        image: 'assets/images/pizza.jpeg',
-                        description: 'Tasty pizza with cheese and tomato sauce',
-                        price: 10.99,
-                        sellerId: 1,
-                        category: 3),
-                    Product(
-                        id: 2,
-                        name: 'chicken',
-                        image: 'assets/images/chicken.jpeg',
-                        description:
-                            'Tasty chicken with cheese and tomato sauce',
-                        price: 10.99,
-                        sellerId: 2,
-                        category: 4),
-                    Product(
-                        id: 3,
-                        name: 'chicken wrap',
-                        image: 'assets/images/chickenwrap.jpeg',
-                        description:
-                            'Tasty chicken wrap with cheese and tomato sauce',
-                        price: 10.99,
-                        sellerId: 3,
-                        category: 5),
-                    Product(
-                        id: 4,
-                        name: 'Sushi',
-                        image: 'assets/images/pilaurice.jpeg',
-                        description: 'Tasty sushi with cheese and tomato sauce',
-                        price: 10.99,
-                        sellerId: 4,
-                        category: 6),
-                    Product(
-                        id: 5,
-                        name: 'spanish rice',
-                        description:
-                            'Tasty spanish rice with cheese and tomato sauce',
-                        price: 10.99,
-                        image: 'assets/images/spanishrice.jpeg',
-                        sellerId: 5,
-                        category: 6)
-                  ],
-=======
                   child: _buildCategoryGrid,
->>>>>>> b761b37 (updating)
                 ),
               ),
             ),
