@@ -485,7 +485,7 @@ class DatabaseService {
               id: id,
               name: name,
               price: price,
-              category: category,
+              category: int.parse(category),
               description: description,
               sellerId: sellerId,
               image: image)
