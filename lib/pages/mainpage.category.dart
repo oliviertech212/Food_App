@@ -142,6 +142,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:foodapp/models/category.model.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/services/database_service.dart';
@@ -158,29 +159,69 @@ class CategoryCard extends StatelessWidget {
       child: Card(
         child: Stack(
           children: [
-            Container(
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      category.image ?? '',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 200,
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.pushNamed(context, '/welcomepage',
+            //         arguments: category.id);
+            //     // );
+            //   },
+            //   child: Container(
+            //     child: Column(
+            //       children: [
+            //         ClipRRect(
+            //           borderRadius: BorderRadius.circular(10),
+            //           child: Image.asset(
+            //             category.image ?? '',
+            //             fit: BoxFit.cover,
+            //             width: double.infinity,
+            //             height: 200,
+            //           ),
+            //         ),
+            //         Text(
+            //           category.name,
+            //           style: TextStyle(
+            //             color: AppColors.textPrimarycolor,
+            //             fontSize: 18,
+            //             fontWeight: FontWeight.bold,
+            //           ).copyWith(
+            //             fontFamily: 'Roboto',
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
+            GestureDetector(
+              onTap: () {
+                print("Tapped on ${category.name}");
+                Navigator.pushNamed(context, '/welcomepage',
+                    arguments: category.id);
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        category.image ?? '',
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 200,
+                      ),
                     ),
-                  ),
-                  Text(
-                    category.name,
-                    style: TextStyle(
-                      color: AppColors.textPrimarycolor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ).copyWith(
-                      fontFamily: 'Roboto',
+                    Text(
+                      category.name,
+                      style: TextStyle(
+                        color: AppColors.textPrimarycolor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ).copyWith(
+                        fontFamily: 'Roboto',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             if (category.free == 'Yes')

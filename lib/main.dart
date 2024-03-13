@@ -7,6 +7,7 @@ import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
 import 'package:foodapp/pages/mainpage.category.dart';
 import 'package:foodapp/pages/welcome_screen.dart';
+import 'package:foodapp/pages/welcomepage.dart';
 import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/pages/verifyemail.dart';
 import 'package:foodapp/utils/theme.dart';
@@ -23,6 +24,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:foodapp/pages/welcomepage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
@@ -85,8 +87,9 @@ class _FoodAppState extends State<FoodApp> {
         '/verification': (context) => const verification(),
         '/new-password': (context) => const NewPassword(),
         '/verifyemail': (context) => const VerifyEmailScreen(),
-        '/welcomepage': (context) => const MyWelcomePage(),
+        '/Mywelcomepage': (context) => const MyWelcomePage(),
         '/mainpagecategory': (context) => const MainpageCategoryScreen(),
+        '/welcomepage': (context) => const WelcomePage(),
       },
     );
   }

@@ -11,7 +11,7 @@ Widget MyElevatedButton(BuildContext context, height, text, click, isloading) {
           click();
         },
         style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.bgprimaryColor,
+          backgroundColor: AppColors.bgprimaryColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
