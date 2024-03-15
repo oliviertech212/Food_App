@@ -437,7 +437,7 @@ class DatabaseService {
       }
       final List<Map<String, Object?>> productsMaps =
           await db.query(ProductTable().tableName);
-      print("products date${productsMaps}");
+      print("products date${productsMaps.toString()}");
 
       if (productsMaps.isEmpty) {
         await db.insert(
