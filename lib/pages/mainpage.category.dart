@@ -194,9 +194,9 @@ class CategoryCard extends StatelessWidget {
 
             GestureDetector(
               onTap: () {
-                print("Tapped on ${category.name}");
+                // print("Tapped on ${category.name}");
                 Navigator.pushNamed(context, '/welcomepage',
-                    arguments: category.id);
+                    arguments: {category.id, category.name});
               },
               child: Container(
                 child: Column(
@@ -414,7 +414,12 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
                 ),
               ),
               child: FutureBuilder<List<Categorys>>(
-                future: futureCategory,
+                future: Future.delayed(
+                  Duration(
+                      seconds:
+                          2), // Change this to the number of seconds you want to delay
+                  () => futureCategory ?? Future.value([]),
+                ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
