@@ -28,6 +28,9 @@ class _WelcomePagesState extends State<WelcomePage> {
   }
 
   void fetchProducts() async {
+    if (table.database == null) {
+      throw Exception("Something went wrong with the database intialization");
+    }
     setState(() {
       futureProduct = table.getAllproduct();
     });
@@ -76,15 +79,25 @@ class _WelcomePagesState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Product>>(
-      future: futureProduct,
-      builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
+    // - Get the id from the route
+    final id =
+        ModalRoute.of(context)!.settings.arguments.toString().split(" ")[0];
+    final categoryName =
+        ModalRoute.of(context)!.settings.arguments.toString().split(" ")[1];
+
+    return FutureBuilder<List<dynamic>>(
+      future: Future.delayed(
+        Duration(seconds: 2),
+        () => futureProduct ?? Future.value([]),
+      ),
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
           return Center(
+            // -we neeed something to reload page instead of displaying errors
             child: Text('Error: ${snapshot.error}'),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -93,13 +106,18 @@ class _WelcomePagesState extends State<WelcomePage> {
           );
         } else {
           var products = snapshot.data!;
+          // Filter products based on category id
+          products =
+              products.where((product) => product.category == id).toList();
+
           return Scaffold(
             backgroundColor: AppColors.bgprimaryColor,
             body: SafeArea(
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
+                    padding:
+                        const EdgeInsets.only(right: 20, left: 20, top: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -177,7 +195,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Main Dishes',
+                          '${categoryName}',
                           style: TextStyle(
                             color: AppColors.textWhitecolor,
                             fontSize: 30,
@@ -249,13 +267,17 @@ class _WelcomePagesState extends State<WelcomePage> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: products.length,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2, // number of items per row
-                            crossAxisSpacing: 10, // spacing between items horizontally
-                            mainAxisSpacing: 20, // spacing between items vertically
+                            crossAxisSpacing:
+                                10, // spacing between items horizontally
+                            mainAxisSpacing:
+                                20, // spacing between items vertically
                           ),
                           itemBuilder: (BuildContext context, int index) {
                             bool isLastItem = (index + 1) % 2 == 2;
+
                             return GestureDetector(
                               onTap: () {
                                 _showProductDetails(products[index]);
@@ -264,61 +286,63 @@ class _WelcomePagesState extends State<WelcomePage> {
                                 margin: const EdgeInsets.only(),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.0),
-              border: Border(
-                bottom: BorderSide(
-                  color: AppColors.textSecondarycolor, // Color of the border between rows
-                  width: isLastItem ? 0 : 3, // Width of the border
-            
-                ),
-              ),
-            ),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    image: DecorationImage(
-                      image: AssetImage(products[index].image),
-                      fit: BoxFit.cover,
-                    ),
-                    border: Border.all(
-                      width: 3.0,
-                      color: AppColors.bgprimaryColor,
-                    ),
-                  ),
-                  height: 90.0,
-                  width: 90.0,
-                ),
-                const SizedBox(height: 5.0),
-                Text(
-                  products[index].name,
-                  style: const TextStyle(
-                    fontFamily: 'roboto',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12.0,
-                  ),
-                ),
-                const SizedBox(height: 10.0),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle buy button click
-                    Navigator.pushNamedAndRemoveUntil(
-                      context, '', (route) => false);
-                  },
-                  child: Text(
-                    'buy now',
-                    style: TextStyle(
-                      color: AppColors.textWhitecolor,
-                      fontSize: 10.0,
-                      fontFamily: 'roboto',
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  )
-                  ],
-                     ),
-                         ),
-            
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: AppColors
+                                          .textSecondarycolor, // Color of the border between rows
+                                      width: isLastItem
+                                          ? 0
+                                          : 3, // Width of the border
+                                    ),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        image: DecorationImage(
+                                          image:
+                                              AssetImage(products[index].image),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        border: Border.all(
+                                          width: 3.0,
+                                          color: AppColors.bgprimaryColor,
+                                        ),
+                                      ),
+                                      height: 90.0,
+                                      width: 90.0,
+                                    ),
+                                    const SizedBox(height: 5.0),
+                                    Text(
+                                      products[index].name,
+                                      style: const TextStyle(
+                                        fontFamily: 'roboto',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12.0,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10.0),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Handle buy button click
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context, '', (route) => false);
+                                      },
+                                      child: Text(
+                                        'buy now',
+                                        style: TextStyle(
+                                            color: AppColors.textWhitecolor,
+                                            fontSize: 10.0,
+                                            fontFamily: 'roboto',
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             );
                           },
                           scrollDirection: Axis.vertical,
