@@ -196,7 +196,7 @@ class CategoryCard extends StatelessWidget {
               onTap: () {
                 // print("Tapped on ${category.name}");
                 Navigator.pushNamed(context, '/welcomepage',
-                    arguments: {category.id, category.name});
+                    arguments: {'id': category.id, 'name': category.name});
               },
               child: Container(
                 child: Column(
