@@ -266,7 +266,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                             children: [
                               // Product Image
                               Container(
-                                width: 100,
+                                width: double.infinity,
                                 height: 100,
                                 margin: EdgeInsets.only(right: 10),
                                 decoration: BoxDecoration(
@@ -278,7 +278,8 @@ class _WelcomePagesState extends State<WelcomePage> {
                                 ),
                               ),
                               // Product Details
-                              Expanded(
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
