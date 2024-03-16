@@ -261,6 +261,68 @@ class _WelcomePagesState extends State<WelcomePage> {
                                         '') +
                                     '...';
 
+                        if (text != null && text != '') {
+                          if (product?.name
+                                  .toLowerCase()
+                                  .contains(text.toLowerCase()) ==
+                              true) {
+                            return Card(
+                              child: Column(
+                                children: [
+                                  // Product Image
+                                  Container(
+                                    width: double.infinity,
+                                    height: 100,
+                                    margin: EdgeInsets.only(right: 10),
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage("${product?.image}"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  // Product Details
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Product Name
+                                        Text(
+                                          " ${product?.name}",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        // Product Description
+                                        Text(
+                                          "${shortDescription}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        // Product Price
+                                        Text(
+                                          'Price: ${product?.price}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return Container();
+                        }
+
                         return Card(
                           child: Column(
                             children: [
