@@ -144,8 +144,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:foodapp/models/category.model.dart';
+import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/services/database_service.dart';
+import 'package:provider/provider.dart';
 
 class CategoryCard extends StatelessWidget {
   final Categorys category;
@@ -284,6 +286,9 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //  --access app cart state
+    var cartData = context.watch<CartProvider>().items;
+    int totalQuantity = cartData;
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: CustomScrollView(
@@ -307,14 +312,30 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
                   CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.white,
-                    child: IconButton(
-                      splashColor: Colors.black,
-                      highlightColor: const Color.fromARGB(255, 61, 59, 59),
-                      icon: const Icon(Icons.shopping_basket,
-                          color: Colors.black),
-                      onPressed: () {
-                        // Navigator.pop(context);
-                      },
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned(
+                          child: Text("$totalQuantity",
+                              style: TextStyle(
+                                color: AppColors.colorError,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Roboto',
+                              )),
+                          right: 3.0,
+                          top: -8.0,
+                        ),
+                        IconButton(
+                          splashColor: Colors.black,
+                          highlightColor: const Color.fromARGB(255, 61, 59, 59),
+                          icon: const Icon(Icons.shopping_basket,
+                              color: Colors.black),
+                          onPressed: () {
+                            // Navigator.pop(context);
+                          },
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -407,6 +428,7 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
           SliverToBoxAdapter(
             child: Container(
               margin: EdgeInsets.only(top: 10),
+              // height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 color: AppColors.backgroundWhite,
                 borderRadius: const BorderRadius.vertical(
@@ -428,7 +450,16 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
                   } else {
                     final data = snapshot.data;
                     if (data == null || data.isEmpty) {
-                      return const Text('There are no categories');
+                      return Column(
+                        children: [
+                          const Center(child: Text('There are no categories')),
+                          TextButton(
+                              onPressed: () async {
+                                fetchCategories();
+                              },
+                              child: Text("Reload "))
+                        ],
+                      );
                     }
                     return ListView.builder(
                       shrinkWrap: true,

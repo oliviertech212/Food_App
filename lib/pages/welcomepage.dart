@@ -213,6 +213,7 @@ class _WelcomePagesState extends State<WelcomePage> {
             child: Center(
               child: Container(
                 height: MediaQuery.of(context).size.height,
+                width: double.infinity,
                 margin: EdgeInsets.only(top: 10),
                 decoration: BoxDecoration(
                   color: AppColors.backgroundWhite,
@@ -233,7 +234,16 @@ class _WelcomePagesState extends State<WelcomePage> {
                     } else {
                       var data = snapshot.data;
                       if (data == null || data.isEmpty) {
-                        return const Text('There are no  Product ');
+                        return Column(
+                          children: [
+                            const Center(child: Text('There are no products')),
+                            TextButton(
+                                onPressed: () async {
+                                  fetchProducts();
+                                },
+                                child: Text("Reload "))
+                          ],
+                        );
                       }
 
                       data = data
