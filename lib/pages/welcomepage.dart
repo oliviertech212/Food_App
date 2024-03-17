@@ -210,70 +210,159 @@ class _WelcomePagesState extends State<WelcomePage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.only(top: 10),
-              decoration: BoxDecoration(
-                color: AppColors.backgroundWhite,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(20),
+            child: Center(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                margin: EdgeInsets.only(top: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundWhite,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
                 ),
-              ),
-              child: FutureBuilder<List<Product>>(
-                future: Future.delayed(
-                  Duration(seconds: 2),
-                  () => futureProduct ?? Future.value([]),
-                ),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    var data = snapshot.data;
-                    if (data == null || data.isEmpty) {
-                      return const Text('There are no  Product ');
-                    }
+                child: FutureBuilder<List<Product>>(
+                  future: Future.delayed(
+                    Duration(seconds: 2),
+                    () => futureProduct ?? Future.value([]),
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      var data = snapshot.data;
+                      if (data == null || data.isEmpty) {
+                        return const Text('There are no  Product ');
+                      }
 
-                    data = data
-                        .where((product) => product.category == id)
-                        .toList();
-                    print("prooooo $data $id");
+                      data = data
+                          .where((product) => product.category == id)
+                          .toList();
+                      print("prooooo $data $id");
 
-                    data.forEach((element) {
-                      print("product ${element.name}");
-                    });
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: data.length ?? 0,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.6, // adjust this value as needed
-                      ),
-                      itemBuilder: (context, index) {
-                        var product = data?[index];
+                      data.forEach((element) {
+                        print("product ${element.name}");
+                      });
+                      return GridView.builder(
+                        // shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: data.length ?? 0,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.6, // adjust this value as needed
+                        ),
+                        itemBuilder: (context, index) {
+                          var product = data?[index];
 
-                        // Shorten the description to 50 characters
-                        String shortDescription =
-                            (product?.description?.length ?? 0) <= 50
-                                ? product?.description ?? ''
-                                : (product?.description?.substring(0, 50) ??
-                                        '') +
-                                    '...';
+                          // Shorten the description to 50 characters
+                          String shortDescription =
+                              (product?.description?.length ?? 0) <= 50
+                                  ? product?.description ?? ''
+                                  : (product?.description?.substring(0, 50) ??
+                                          '') +
+                                      '...';
 
-                        if (text != null && text != '') {
-                          if (product?.name
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()) ==
-                              true) {
-                            return Card(
+                          if (text != null && text != '') {
+                            if (product?.name
+                                    .toLowerCase()
+                                    .contains(text.toLowerCase()) ==
+                                true) {
+                              return Card(
+                                clipBehavior: product?.image == null
+                                    ? Clip.none
+                                    : Clip.antiAliasWithSaveLayer,
+                                child: Column(
+                                  children: [
+                                    // Product Image
+                                    Container(
+                                      width: double.infinity,
+                                      height: 120,
+                                      // margin: EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image:
+                                              AssetImage("${product?.image}"),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    // Product Details
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Product Name
+                                          Text(
+                                            " ${product?.name}",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          // Product Description
+                                          Text(
+                                            "${shortDescription}",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          // Product Price
+                                          Text(
+                                            'Price: ${product?.price}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(0.0),
+                                            child: Container(
+                                              width: 100,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  IconButton(
+                                                    icon: Icon(Icons
+                                                        .add_shopping_cart),
+                                                    onPressed: () {
+                                                      // _showProductDetails(product);
+                                                    },
+                                                  ),
+                                                  Text("0")
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return Container();
+                          }
+
+                          return SizedBox(
+                            height: 200.0, // Set the desired height here
+                            child: Card(
+                              clipBehavior: product?.image == null
+                                  ? Clip.none
+                                  : Clip.antiAliasWithSaveLayer,
                               child: Column(
                                 children: [
                                   // Product Image
                                   Container(
                                     width: double.infinity,
-                                    height: 100,
-                                    margin: EdgeInsets.only(right: 10),
+                                    height: 120,
+                                    // margin: EdgeInsets.only(right: 10),
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: AssetImage("${product?.image}"),
@@ -313,72 +402,39 @@ class _WelcomePagesState extends State<WelcomePage> {
                                             color: Colors.green,
                                           ),
                                         ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Container(
+                                            width: 100,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                IconButton(
+                                                  icon: Icon(
+                                                      Icons.add_shopping_cart),
+                                                  onPressed: () {
+                                                    // _showProductDetails(product);
+                                                  },
+                                                ),
+                                                Text("0")
+                                              ],
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
-                            );
-                          }
-                          return Container();
-                        }
-
-                        return Card(
-                          child: Column(
-                            children: [
-                              // Product Image
-                              Container(
-                                width: double.infinity,
-                                height: 100,
-                                margin: EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage("${product?.image}"),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              // Product Details
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Product Name
-                                    Text(
-                                      " ${product?.name}",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    // Product Description
-                                    Text(
-                                      "${shortDescription}",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    // Product Price
-                                    Text(
-                                      'Price: ${product?.price}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
               ),
             ),
           ),
