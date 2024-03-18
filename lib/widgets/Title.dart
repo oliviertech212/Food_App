@@ -11,6 +11,7 @@ Widget myTitle(BuildContext context, {totalQuantity}) {
           icon: const Icon(Icons.menu, color: Colors.white),
           onPressed: () {
             // Navigator.pop(context);
+            Navigator.pushNamed(context, '/wishlist');
           },
         ),
         CircleAvatar(

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
+import 'package:foodapp/services/stateMngt/wishlist.provider.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
@@ -91,6 +92,7 @@ class _WelcomePagesState extends State<WelcomePage> {
         items.where((element) => element.id == id).toList().length;
     return similarItem;
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +110,12 @@ class _WelcomePagesState extends State<WelcomePage> {
     var cartData = context.watch<CartProvider>();
     int totalQuantity = cartData.items;
     List<Product> allItems = cartData.allItems;
+    // --access app wishlist state
+    var wishlistItems = context.watch<WishlistProvider>();
+    int totalWishlistItems = wishlistItems.items;
+    List<Product> allWishlistItems = wishlistItems.allItems;
+
+
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -412,6 +420,8 @@ class _WelcomePagesState extends State<WelcomePage> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
+                                                Expanded(
+                                                  child:
                                                 IconButton(
                                                   icon: Icon(
                                                       Icons.add_shopping_cart),
@@ -421,12 +431,30 @@ class _WelcomePagesState extends State<WelcomePage> {
                                                         .add(product!);
                                                   },
                                                 ),
+                                                ),
                                                 Text(
-                                                    "${totalcartItems(allItems, product!.id)}")
+                                                    "${totalcartItems(allItems, product!.id)}"),
+                                                    const SizedBox(width: 10,),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    if (allWishlistItems
+                                                        .contains(product)) {
+                                                      context
+                                                          .read<WishlistProvider>()
+                                                          .removeProduct(product);
+                                                    } else {
+                                                      context
+                                                          .read<WishlistProvider>()
+                                                          .addProduct(product);
+                                                    }
+                                                  }, icon: Icon(Icons.favorite_border,
+                                                  color: Colors.red,
+                                                  
+                                                  ),)
                                               ],
                                             ),
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),

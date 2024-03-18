@@ -12,6 +12,7 @@ import 'package:foodapp/pages/welcomepage.dart';
 import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/pages/verifyemail.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
+import 'package:foodapp/services/stateMngt/wishlist.provider.dart';
 import 'package:foodapp/utils/theme.dart';
 import 'package:foodapp/pages/signup.dart';
 import 'package:foodapp/pages/forgot_password.dart';
@@ -28,7 +29,7 @@ import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:foodapp/pages/welcomepage.dart';
 import 'package:provider/provider.dart';
-
+import 'package:foodapp/pages/wishlist.screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
 
@@ -59,8 +60,13 @@ Future<void> main() async {
 
     // Start the application
     runApp(
-      ChangeNotifierProvider(
-          create: (context) => CartProvider(), child: const FoodApp()),
+       MultiProvider(
+    providers: [
+      ChangeNotifierProvider<CartProvider>(create: (context) => CartProvider()),
+      ChangeNotifierProvider<WishlistProvider>(create: (context) => WishlistProvider()),
+    ],
+    child: const FoodApp(),
+  ),
     );
   } catch (error) {
     print('Error initializing database main: ${error.toString()}');
@@ -97,6 +103,7 @@ class _FoodAppState extends State<FoodApp> {
         '/mainpagecategory': (context) => const MainpageCategoryScreen(),
         '/welcomepage': (context) => const WelcomePage(),
         '/cart': (context) => const MyCartPage(),
+        '/wishlist': (context) => WishlistPage(),
       },
     );
   }
