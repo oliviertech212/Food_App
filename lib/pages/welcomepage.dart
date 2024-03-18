@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 import 'package:foodapp/services/database_service.dart';
+import 'package:foodapp/widgets/Title.dart';
+import 'package:provider/provider.dart';
 
 // void _showProductDetails(Product product) {
 //   showDialog(
@@ -83,6 +86,12 @@ class _WelcomePagesState extends State<WelcomePage> {
     });
   }
 
+  int totalcartItems(List items, int id) {
+    int similarItem =
+        items.where((element) => element.id == id).toList().length;
+    return similarItem;
+  }
+
   @override
   Widget build(BuildContext context) {
     // - Get the id from the route
@@ -95,6 +104,11 @@ class _WelcomePagesState extends State<WelcomePage> {
       categoryName = args['name'];
     }
 
+    //  --access app cart state
+    var cartData = context.watch<CartProvider>();
+    int totalQuantity = cartData.items;
+    List<Product> allItems = cartData.allItems;
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: CustomScrollView(
@@ -104,33 +118,7 @@ class _WelcomePagesState extends State<WelcomePage> {
             floating: true,
             pinned: true,
             centerTitle: false,
-            title: Container(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.menu, color: Colors.white),
-                    onPressed: () {
-                      // Navigator.pop(context);
-                    },
-                  ),
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.white,
-                    child: IconButton(
-                      splashColor: Colors.black,
-                      highlightColor: const Color.fromARGB(255, 61, 59, 59),
-                      icon: const Icon(Icons.shopping_basket,
-                          color: Colors.black),
-                      onPressed: () {
-                        // Navigator.pop(context);
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
+            title: myTitle(context, totalQuantity: totalQuantity),
             bottom: PreferredSize(
               preferredSize:
                   Size.fromHeight(60.0), // You can adjust this value as needed
@@ -322,7 +310,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                                           ),
                                           // Product Price
                                           Text(
-                                            'Price: ${product?.price}',
+                                            'Price: ${product?.price}  Rwf',
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -342,10 +330,13 @@ class _WelcomePagesState extends State<WelcomePage> {
                                                     icon: Icon(Icons
                                                         .add_shopping_cart),
                                                     onPressed: () {
-                                                      // _showProductDetails(product);
+                                                      context
+                                                          .read<CartProvider>()
+                                                          .add(product!);
                                                     },
                                                   ),
-                                                  Text("0")
+                                                  Text(
+                                                      "${totalcartItems(allItems, product!.id)}")
                                                 ],
                                               ),
                                             ),
@@ -405,7 +396,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                                         ),
                                         // Product Price
                                         Text(
-                                          'Price: ${product?.price}',
+                                          'Price: ${product?.price} Rwf ',
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -425,10 +416,13 @@ class _WelcomePagesState extends State<WelcomePage> {
                                                   icon: Icon(
                                                       Icons.add_shopping_cart),
                                                   onPressed: () {
-                                                    // _showProductDetails(product);
+                                                    context
+                                                        .read<CartProvider>()
+                                                        .add(product!);
                                                   },
                                                 ),
-                                                Text("0")
+                                                Text(
+                                                    "${totalcartItems(allItems, product!.id)}")
                                               ],
                                             ),
                                           ),

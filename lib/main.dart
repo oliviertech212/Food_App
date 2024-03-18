@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/functions/firebaseauthentication.dart';
+import 'package:foodapp/pages/cart.screen.dart';
 import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
 import 'package:foodapp/pages/mainpage.category.dart';
@@ -95,6 +96,7 @@ class _FoodAppState extends State<FoodApp> {
         '/Mywelcomepage': (context) => const MyWelcomePage(),
         '/mainpagecategory': (context) => const MainpageCategoryScreen(),
         '/welcomepage': (context) => const WelcomePage(),
+        '/cart': (context) => const MyCartPage(),
       },
     );
   }

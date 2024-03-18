@@ -12,8 +12,21 @@ class CartProvider extends ChangeNotifier {
   /// The current total price of all items (assuming all items cost $42).
   int get totalPrice => _items.length * 42;
   get items => _items.length;
+  get allItems => _items;
 
   /// Adds [item] to cart. This and [removeAll] are the only ways to modify the
+
+  void remove(Product item) {
+    _items.remove(item);
+    // This call tells the widgets that are listening to this model to rebuild.
+    notifyListeners();
+  }
+
+  void removeAt(int index) {
+    _items.removeAt(index);
+    // This call tells the widgets that are listening to this model to rebuild.
+    notifyListeners();
+  }
 
   void add(Product item) {
     _items.add(item);

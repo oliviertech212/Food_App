@@ -147,6 +147,7 @@ import 'package:foodapp/models/category.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/services/database_service.dart';
+import 'package:foodapp/widgets/Title.dart';
 import 'package:provider/provider.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -298,49 +299,7 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
             floating: true,
             pinned: true,
             centerTitle: false,
-            title: Container(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.menu, color: Colors.white),
-                    onPressed: () {
-                      // Navigator.pop(context);
-                    },
-                  ),
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.white,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Positioned(
-                          child: Text("$totalQuantity",
-                              style: TextStyle(
-                                color: AppColors.colorError,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Roboto',
-                              )),
-                          right: 3.0,
-                          top: -8.0,
-                        ),
-                        IconButton(
-                          splashColor: Colors.black,
-                          highlightColor: const Color.fromARGB(255, 61, 59, 59),
-                          icon: const Icon(Icons.shopping_basket,
-                              color: Colors.black),
-                          onPressed: () {
-                            // Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+            title: myTitle(context, totalQuantity: totalQuantity),
             bottom: PreferredSize(
               preferredSize:
                   Size.fromHeight(60.0), // You can adjust this value as needed
