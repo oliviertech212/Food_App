@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/functions/firebaseauthentication.dart';
+import 'package:foodapp/pages/cart.screen.dart';
 import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
 import 'package:foodapp/pages/mainpage.category.dart';
@@ -10,6 +11,7 @@ import 'package:foodapp/pages/welcome_screen.dart';
 import 'package:foodapp/pages/welcomepage.dart';
 import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/pages/verifyemail.dart';
+import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/utils/theme.dart';
 import 'package:foodapp/pages/signup.dart';
 import 'package:foodapp/pages/forgot_password.dart';
@@ -25,6 +27,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:foodapp/pages/welcomepage.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
@@ -55,7 +58,10 @@ Future<void> main() async {
     print("database initialized${databaseService.database} ");
 
     // Start the application
-    runApp(const FoodApp());
+    runApp(
+      ChangeNotifierProvider(
+          create: (context) => CartProvider(), child: const FoodApp()),
+    );
   } catch (error) {
     print('Error initializing database main: ${error.toString()}');
     // Handle other potential errors gracefully
@@ -90,6 +96,7 @@ class _FoodAppState extends State<FoodApp> {
         '/Mywelcomepage': (context) => const MyWelcomePage(),
         '/mainpagecategory': (context) => const MainpageCategoryScreen(),
         '/welcomepage': (context) => const WelcomePage(),
+        '/cart': (context) => const MyCartPage(),
       },
     );
   }
