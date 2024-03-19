@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:foodapp/models/cart.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/services/stateMngt/wishlist.provider.dart';
 import 'package:foodapp/utils/colors.dart';
@@ -87,12 +88,11 @@ class _WelcomePagesState extends State<WelcomePage> {
     });
   }
 
-  int totalcartItems(List items, int id) {
-    int similarItem =
-        items.where((element) => element.id == id).toList().length;
-    return similarItem;
-  }
-  
+  // int totalcartItems(List items, int id) {
+  //   int similarItem =
+  //       items.where((element) => element.id == id).toList().length;
+  //   return similarItem;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -109,13 +109,11 @@ class _WelcomePagesState extends State<WelcomePage> {
     //  --access app cart state
     var cartData = context.watch<CartProvider>();
     int totalQuantity = cartData.items;
-    List<Product> allItems = cartData.allItems;
+    List<CartItem> allItems = cartData.allItems;
     // --access app wishlist state
     var wishlistItems = context.watch<WishlistProvider>();
     int totalWishlistItems = wishlistItems.items;
     List<Product> allWishlistItems = wishlistItems.allItems;
-
-
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -344,7 +342,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                                                     },
                                                   ),
                                                   Text(
-                                                      "${totalcartItems(allItems, product!.id)}")
+                                                      "${context.read<CartProvider>().totalSimilarItems(product!.id)}"),
                                                 ],
                                               ),
                                             ),
@@ -421,36 +419,42 @@ class _WelcomePagesState extends State<WelcomePage> {
                                                       .spaceBetween,
                                               children: [
                                                 Expanded(
-                                                  child:
-                                                IconButton(
-                                                  icon: Icon(
-                                                      Icons.add_shopping_cart),
-                                                  onPressed: () {
-                                                    context
-                                                        .read<CartProvider>()
-                                                        .add(product!);
-                                                  },
-                                                ),
+                                                  child: IconButton(
+                                                    icon: Icon(Icons
+                                                        .add_shopping_cart),
+                                                    onPressed: () {
+                                                      context
+                                                          .read<CartProvider>()
+                                                          .add(product!);
+                                                    },
+                                                  ),
                                                 ),
                                                 Text(
-                                                    "${totalcartItems(allItems, product!.id)}"),
-                                                    const SizedBox(width: 10,),
+                                                    "${context.read<CartProvider>().totalSimilarItems(product!.id)}"),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
                                                 IconButton(
                                                   onPressed: () {
                                                     if (allWishlistItems
                                                         .contains(product)) {
                                                       context
-                                                          .read<WishlistProvider>()
-                                                          .removeProduct(product);
+                                                          .read<
+                                                              WishlistProvider>()
+                                                          .removeProduct(
+                                                              product);
                                                     } else {
                                                       context
-                                                          .read<WishlistProvider>()
+                                                          .read<
+                                                              WishlistProvider>()
                                                           .addProduct(product);
                                                     }
-                                                  }, icon: Icon(Icons.favorite_border,
-                                                  color: Colors.red,
-                                                  
-                                                  ),)
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.favorite_border,
+                                                    color: Colors.red,
+                                                  ),
+                                                )
                                               ],
                                             ),
                                           ),
