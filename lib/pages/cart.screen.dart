@@ -25,7 +25,6 @@ class _MyCartPageState extends State<MyCartPage> {
 
     allItems.forEach((element) => print(
         "items in cart${element.name} ${element.price} ${element.image}"));
-
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
@@ -57,7 +56,9 @@ class _MyCartPageState extends State<MyCartPage> {
                           IconButton(
                             icon: Icon(Icons.remove),
                             onPressed: () {
-                              // code to decrease the quantity of the product
+                              context
+                                  .read<CartProvider>()
+                                  .decreaseQuantity(index);
                             },
                           ),
                           Text(
@@ -65,7 +66,9 @@ class _MyCartPageState extends State<MyCartPage> {
                           IconButton(
                             icon: Icon(Icons.add),
                             onPressed: () {
-                              // code to increase the quantity of the product
+                              context
+                                  .read<CartProvider>()
+                                  .increaseQuantity(index);
                             },
                           ),
                         ],

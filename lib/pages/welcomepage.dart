@@ -93,6 +93,9 @@ class _WelcomePagesState extends State<WelcomePage> {
   //       items.where((element) => element.id == id).toList().length;
   //   return similarItem;
   // }
+  void addToCart(BuildContext context, Product product) {
+    context.read<CartProvider>().add(product);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -413,49 +416,56 @@ class _WelcomePagesState extends State<WelcomePage> {
                                           padding: const EdgeInsets.all(0.0),
                                           child: Container(
                                             width: 100,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: IconButton(
-                                                    icon: Icon(Icons
-                                                        .add_shopping_cart),
+                                            child: Consumer<CartProvider>(
+                                              builder: (context, cartProvider,
+                                                      child) =>
+                                                  Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: IconButton(
+                                                      icon: Icon(Icons
+                                                          .add_shopping_cart),
+                                                      onPressed: () {
+                                                        cartProvider
+                                                            .add(product!);
+                                                      },
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                      "${cartProvider.totalSimilarItems(product!.id)}"),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  IconButton(
                                                     onPressed: () {
-                                                      context
-                                                          .read<CartProvider>()
-                                                          .add(product!);
+                                                      final wishlistProvider =
+                                                          context.read<
+                                                              WishlistProvider>();
+                                                      if (allWishlistItems
+                                                          .contains(product)) {
+                                                        wishlistProvider
+                                                            .removeProduct(
+                                                                product);
+                                                      } else {
+                                                        wishlistProvider
+                                                            .addProduct(
+                                                                product);
+                                                      }
                                                     },
+                                                    icon: Icon(
+                                                      allWishlistItems
+                                                              .contains(product)
+                                                          ? Icons.favorite
+                                                          : Icons
+                                                              .favorite_border,
+                                                      color: Colors.red,
+                                                    ),
                                                   ),
-                                                ),
-                                                Text(
-                                                    "${context.read<CartProvider>().totalSimilarItems(product!.id)}"),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    if (allWishlistItems
-                                                        .contains(product)) {
-                                                      context
-                                                          .read<
-                                                              WishlistProvider>()
-                                                          .removeProduct(
-                                                              product);
-                                                    } else {
-                                                      context
-                                                          .read<
-                                                              WishlistProvider>()
-                                                          .addProduct(product);
-                                                    }
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.favorite_border,
-                                                    color: Colors.red,
-                                                  ),
-                                                )
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
