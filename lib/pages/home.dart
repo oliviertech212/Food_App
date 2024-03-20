@@ -119,10 +119,10 @@ class _HomePageState extends State<HomePage> {
                           }, loading)
                         : MyElevatedButton(context, 50.0, "login", () {
                             Navigator.pushNamedAndRemoveUntil(
-                                // context, '/login', (route) => false);
-                                context,
-                                '/mainpagecategory',
-                                (route) => false);
+                                context, '/login', (route) => false);
+                            // context,
+                            // '/mainpagecategory',
+                            // (route) => false);
                           }, loading),
               ),
             ],

@@ -172,7 +172,7 @@ class _MySignupPageState extends State<MySignupPage> {
                             obscureText: true,
                             keyboardType: TextInputType.visiblePassword,
                             textInputAction: TextInputAction.next,
-                            maxLength: 9,
+                            // maxLength: 9,
                             field: "password",
                             validator: (value) {},
                           ),

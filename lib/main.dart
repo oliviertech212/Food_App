@@ -30,6 +30,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:foodapp/pages/welcomepage.dart';
 import 'package:provider/provider.dart';
 import 'package:foodapp/pages/wishlist.screen.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
 
@@ -60,13 +61,15 @@ Future<void> main() async {
 
     // Start the application
     runApp(
-       MultiProvider(
-    providers: [
-      ChangeNotifierProvider<CartProvider>(create: (context) => CartProvider()),
-      ChangeNotifierProvider<WishlistProvider>(create: (context) => WishlistProvider()),
-    ],
-    child: const FoodApp(),
-  ),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<CartProvider>(
+              create: (context) => CartProvider()),
+          ChangeNotifierProvider<WishlistProvider>(
+              create: (context) => WishlistProvider()),
+        ],
+        child: const FoodApp(),
+      ),
     );
   } catch (error) {
     print('Error initializing database main: ${error.toString()}');
@@ -88,7 +91,7 @@ class _FoodAppState extends State<FoodApp> {
     return MaterialApp(
       // scaffoldMessengerKey: _scaffoldKey,
       theme: foodApptheme,
-      title: 'welcome',
+      title: 'wedeliver',
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
       routes: {

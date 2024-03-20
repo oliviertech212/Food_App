@@ -5,15 +5,15 @@ Widget myTitle(BuildContext context, {totalQuantity}) {
   return Container(
     width: double.infinity,
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white),
-          onPressed: () {
-            // Navigator.pop(context);
-            Navigator.pushNamed(context, '/wishlist');
-          },
-        ),
+        // IconButton(
+        //   icon: const Icon(Icons.menu, color: Colors.white),
+        //   onPressed: () {
+        //     // Navigator.pop(context);
+        //     Navigator.pushNamed(context, '/wishlist');
+        //   },
+        // ),
         CircleAvatar(
           radius: 20,
           backgroundColor: Colors.white,
