@@ -34,7 +34,12 @@ class _MyCartPageState extends State<MyCartPage> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            color: AppColors.backgroundWhite,
+            decoration: BoxDecoration(
+              color: AppColors.backgroundWhite,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20.0), // Small rounded corners at the top
+              ),
+            ),
             height: MediaQuery.of(context).size.height,
             child: Column(
               children: [

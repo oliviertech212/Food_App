@@ -11,7 +11,7 @@ Widget brandName(BuildContext context) {
               style: TextStyle(
                 color: AppColors.textPrimarycolor,
                 fontFamily: 'Roboto',
-                fontSize: 55,
+                fontSize: 45,
                 fontWeight: FontWeight.bold,
               )),
           Text(

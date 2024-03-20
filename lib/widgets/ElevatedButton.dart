@@ -4,7 +4,7 @@ import 'package:foodapp/utils/colors.dart';
 
 Widget MyElevatedButton(BuildContext context, height, text, click, isloading) {
   return SizedBox(
-      height: height as double,
+      height: 40.0,
       // width: width,
       child: ElevatedButton(
         onPressed: () {
@@ -24,7 +24,7 @@ Widget MyElevatedButton(BuildContext context, height, text, click, isloading) {
                 text,
                 style: TextStyle(
                   color: AppColors.textWhitecolor,
-                  fontSize: 30,
+                  fontSize: 20,
                 ).copyWith(
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.bold,

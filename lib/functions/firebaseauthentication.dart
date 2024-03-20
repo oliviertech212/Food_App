@@ -52,11 +52,11 @@ class FirebaseAuthenticationService {
     }
   }
 
-  static Future<void> signOut() async {
+  Future<void> signOut() async {
     await auth.signOut();
   }
 
-  static Future<void> resetPassword(String email) async {
+  Future<void> resetPassword(String email) async {
     await auth.sendPasswordResetEmail(email: email);
   }
 
