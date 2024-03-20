@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:foodapp/models/cart.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
@@ -9,6 +10,7 @@ import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/widgets/Title.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 // void _showProductDetails(Product product) {
@@ -52,6 +54,118 @@ import 'package:provider/provider.dart';
 //   );
 // }
 
+void _showProductDetails(BuildContext context, Product product) {
+  try {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: EdgeInsets.zero, // to remove default padding
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+
+              ),
+              border: Border.all(),
+              color: AppColors.bgSecondarydark,
+            ),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Product image
+                Image.asset(
+                  product.image,
+                  width: double.infinity,
+                  height: 300,
+                  fit: BoxFit.cover,
+                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Product name
+                        Text(
+                          product.name,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        // Product description
+                        Text(
+                          product.description,
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        // Product price
+                        Text(
+                          'Price: ${product.price} Rwf',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                        // Add to cart button
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                context.read<CartProvider>().add(product);
+                                Navigator.of(context).pop();
+                              },
+                              icon: Icon(Icons.add_shopping_cart),
+                            ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              onPressed: () {
+                                final wishlistProvider = context.read<WishlistProvider>();
+                                if (wishlistProvider.allItems.contains(product)) {
+                                  wishlistProvider.removeProduct(product);
+                                } else {
+                                  wishlistProvider.addProduct(product);
+                                }
+                                Navigator.of(context).pop();
+                              },
+                              icon: Icon(
+                                context.read<WishlistProvider>().allItems.contains(product)
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Close',
+                            style: TextStyle(
+                              color: AppColors.bgprimaryColor,
+                              fontWeight: FontWeight.bold
+                            ),
+                         )
+                        )
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  } catch (e) {
+    print('Error while showing product details: $e');
+  }
+}
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -275,14 +389,24 @@ class _WelcomePagesState extends State<WelcomePage> {
                                     .toLowerCase()
                                     .contains(text.toLowerCase()) ==
                                 true) {
-                              return Card(
-                                clipBehavior: product?.image == null
-                                    ? Clip.none
-                                    : Clip.antiAliasWithSaveLayer,
-                                child: Column(
+                              return GestureDetector(
+                                onTap: () {
+                                  print('Product image tapped');
+                                  if (product != null) {
+                                    _showProductDetails(context, product);
+                                  }
+                                  else {
+                                    print('Product is null');
+                                  }
+                                },
+                                child: Card(
+                                  clipBehavior: product?.image == null
+                                      ? Clip.none
+                                      : Clip.antiAliasWithSaveLayer,
+                                  child: Column(
                                   children: [
                                     // Product Image
-                                    Container(
+                                     Container(
                                       width: double.infinity,
                                       height: 120,
                                       // margin: EdgeInsets.only(right: 10),
@@ -295,6 +419,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
+                                    
                                     // Product Details
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -355,12 +480,22 @@ class _WelcomePagesState extends State<WelcomePage> {
                                     ),
                                   ],
                                 ),
-                              );
+                              ));
                             }
                             return Container();
                           }
 
-                          return SizedBox(
+                          return GestureDetector(
+                            onTap: () {
+                              print('Product image tapped');
+                              if (product != null) {
+                                _showProductDetails(context, product);
+                              }
+                              else {
+                                print('Product is null');
+                              }
+                            },
+                            child: SizedBox(
                             height: 200.0, // Set the desired height here
                             child: Card(
                               clipBehavior: product?.image == null
@@ -475,7 +610,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                                 ],
                               ),
                             ),
-                          );
+                          ));
                         },
                       );
                     }
