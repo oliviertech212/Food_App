@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:foodapp/models/cart.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
@@ -9,48 +10,9 @@ import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/widgets/Title.dart';
+import 'package:foodapp/widgets/productDialog.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-
-// void _showProductDetails(Product product) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         backgroundColor: AppColors.bgSecondarydark,
-//         title: Text(product.name),
-//         content: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             Image.asset(
-//               product.image,
-//               height: 90,
-//               width: 90,
-//             ),
-//             const SizedBox(height: 10),
-//             Text(
-//               'Description: ${product.description}',
-//               style: const TextStyle(fontWeight: FontWeight.bold),
-//             ),
-//             const SizedBox(height: 10),
-//             Text('Price: \$${product.price}',
-//                 style: const TextStyle(
-//                   fontWeight: FontWeight.bold,
-//                 )),
-//           ],
-//         ),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//             child: const Text('Close'),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -275,207 +237,237 @@ class _WelcomePagesState extends State<WelcomePage> {
                                     .toLowerCase()
                                     .contains(text.toLowerCase()) ==
                                 true) {
-                              return Card(
-                                clipBehavior: product?.image == null
-                                    ? Clip.none
-                                    : Clip.antiAliasWithSaveLayer,
-                                child: Column(
-                                  children: [
-                                    // Product Image
-                                    Container(
-                                      width: double.infinity,
-                                      height: 120,
-                                      // margin: EdgeInsets.only(right: 10),
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image:
-                                              AssetImage("${product?.image}"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    // Product Details
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // Product Name
-                                          Text(
-                                            " ${product?.name}",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          // Product Description
-                                          Text(
-                                            "${shortDescription}",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          // Product Price
-                                          Text(
-                                            'Price: ${product?.price}  Rwf',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(0.0),
-                                            child: Container(
-                                              width: 100,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  IconButton(
-                                                    icon: Icon(Icons
-                                                        .add_shopping_cart),
-                                                    onPressed: () {
-                                                      context
-                                                          .read<CartProvider>()
-                                                          .add(product!);
-                                                    },
-                                                  ),
-                                                  Text(
-                                                      "${context.read<CartProvider>().totalSimilarItems(product!.id)}"),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return Container();
-                          }
-
-                          return SizedBox(
-                            height: 200.0, // Set the desired height here
-                            child: Card(
-                              clipBehavior: product?.image == null
-                                  ? Clip.none
-                                  : Clip.antiAliasWithSaveLayer,
-                              child: Column(
-                                children: [
-                                  // Product Image
-                                  Container(
-                                    width: double.infinity,
-                                    height: 120,
-                                    // margin: EdgeInsets.only(right: 10),
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage("${product?.image}"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  // Product Details
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                              return GestureDetector(
+                                  onTap: () {
+                                    print('Product image tapped');
+                                    if (product != null) {
+                                      //  - Show the product details
+                                      MySingleProductDialog(context, product);
+                                    } else {
+                                      print('Product is null');
+                                    }
+                                  },
+                                  child: Card(
+                                    clipBehavior: product?.image == null
+                                        ? Clip.none
+                                        : Clip.antiAliasWithSaveLayer,
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
-                                        // Product Name
-                                        Text(
-                                          " ${product?.name}",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        // Product Description
-                                        Text(
-                                          "${shortDescription}",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        // Product Price
-                                        Text(
-                                          'Price: ${product?.price} Rwf ',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(0.0),
-                                          child: Container(
-                                            width: 100,
-                                            child: Consumer<CartProvider>(
-                                              builder: (context, cartProvider,
-                                                      child) =>
-                                                  Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: IconButton(
-                                                      icon: Icon(Icons
-                                                          .add_shopping_cart),
-                                                      onPressed: () {
-                                                        cartProvider
-                                                            .add(product!);
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                      "${cartProvider.totalSimilarItems(product!.id)}"),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      final wishlistProvider =
-                                                          context.read<
-                                                              WishlistProvider>();
-                                                      if (allWishlistItems
-                                                          .contains(product)) {
-                                                        wishlistProvider
-                                                            .removeProduct(
-                                                                product);
-                                                      } else {
-                                                        wishlistProvider
-                                                            .addProduct(
-                                                                product);
-                                                      }
-                                                    },
-                                                    icon: Icon(
-                                                      allWishlistItems
-                                                              .contains(product)
-                                                          ? Icons.favorite
-                                                          : Icons
-                                                              .favorite_border,
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                        // Product Image
+                                        Container(
+                                          width: double.infinity,
+                                          height: 120,
+                                          // margin: EdgeInsets.only(right: 10),
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                  "${product?.image}"),
+                                              fit: BoxFit.cover,
                                             ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+
+                                        // Product Details
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              // Product Name
+                                              Text(
+                                                " ${product?.name}",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              // Product Description
+                                              Text(
+                                                "${shortDescription}",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              // Product Price
+                                              Text(
+                                                'Price: ${product?.price}  Rwf',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(0.0),
+                                                child: Container(
+                                                  width: 100,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      IconButton(
+                                                        icon: Icon(Icons
+                                                            .add_shopping_cart),
+                                                        onPressed: () {
+                                                          context
+                                                              .read<
+                                                                  CartProvider>()
+                                                              .add(product!);
+                                                        },
+                                                      ),
+                                                      Text(
+                                                          "${context.read<CartProvider>().totalSimilarItems(product!.id)}"),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
+                                  ));
+                            }
+                            return Container();
+                          }
+
+                          return GestureDetector(
+                              onTap: () {
+                                print('Product image tapped');
+                                if (product != null) {
+                                  //  - Show the product details
+                                  MySingleProductDialog(context, product);
+                                } else {
+                                  print('Product is null');
+                                }
+                              },
+                              child: SizedBox(
+                                height: 200.0, // Set the desired height here
+                                child: Card(
+                                  clipBehavior: product?.image == null
+                                      ? Clip.none
+                                      : Clip.antiAliasWithSaveLayer,
+                                  child: Column(
+                                    children: [
+                                      // Product Image
+                                      Container(
+                                        width: double.infinity,
+                                        height: 120,
+                                        // margin: EdgeInsets.only(right: 10),
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image:
+                                                AssetImage("${product?.image}"),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      // Product Details
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Product Name
+                                            Text(
+                                              " ${product?.name}",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            // Product Description
+                                            Text(
+                                              "${shortDescription}",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            // Product Price
+                                            Text(
+                                              'Price: ${product?.price} Rwf ',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(0.0),
+                                              child: Container(
+                                                width: 100,
+                                                child: Consumer<CartProvider>(
+                                                  builder: (context,
+                                                          cartProvider,
+                                                          child) =>
+                                                      Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: IconButton(
+                                                          icon: Icon(Icons
+                                                              .add_shopping_cart),
+                                                          onPressed: () {
+                                                            cartProvider
+                                                                .add(product!);
+                                                          },
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                          "${cartProvider.totalSimilarItems(product!.id)}"),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          final wishlistProvider =
+                                                              context.read<
+                                                                  WishlistProvider>();
+                                                          if (allWishlistItems
+                                                              .contains(
+                                                                  product)) {
+                                                            wishlistProvider
+                                                                .removeProduct(
+                                                                    product);
+                                                          } else {
+                                                            wishlistProvider
+                                                                .addProduct(
+                                                                    product);
+                                                          }
+                                                        },
+                                                        icon: Icon(
+                                                          allWishlistItems
+                                                                  .contains(
+                                                                      product)
+                                                              ? Icons.favorite
+                                                              : Icons
+                                                                  .favorite_border,
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          );
+                                ),
+                              ));
                         },
                       );
                     }

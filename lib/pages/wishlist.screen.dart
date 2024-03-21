@@ -52,6 +52,7 @@ class _WishlistPageState extends State<WishlistPage> {
                             icon: Icon(Icons.remove),
                             onPressed: () {
                               // code to decrease the quantity of the product
+                              context.read<WishlistProvider>().removeProduct(allItems[index]);
                             },
                           ),
                           Text(

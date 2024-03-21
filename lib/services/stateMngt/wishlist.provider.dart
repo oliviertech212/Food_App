@@ -20,6 +20,9 @@ class WishlistProvider extends ChangeNotifier {
 
   void removeProduct(Product item) {
     _items.remove(item);
+    if (_items.contains(item)) {
+      _items.remove(item);
+    }
     notifyListeners();
   }
 }
