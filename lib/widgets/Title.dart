@@ -3,6 +3,7 @@ import 'package:foodapp/utils/colors.dart';
 
 Widget myTitle(BuildContext context, {totalQuantity}) {
   return Container(
+    color: AppColors.colorError,
     width: double.infinity,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.end,

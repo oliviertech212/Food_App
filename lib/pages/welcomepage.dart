@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/models/cart.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/services/stateMngt/wishlist.provider.dart';
@@ -90,6 +91,33 @@ class _WelcomePagesState extends State<WelcomePage> {
             pinned: true,
             centerTitle: false,
             title: myTitle(context, totalQuantity: totalQuantity),
+            actions: [
+              PopupMenuButton(
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: Text("Home"),
+                          value: 1,
+                          onTap: () {
+                            Navigator.pushNamed(context, '/home');
+                          },
+                        ),
+                        PopupMenuItem(
+                            child: Text("Logout"),
+                            value: 2,
+                            onTap: () async {
+                              FirebaseAuthenticationService
+                                  firebaseAuthenticationService =
+                                  FirebaseAuthenticationService();
+                              await firebaseAuthenticationService.signOut();
+                              Navigator.pushNamed(context, '/home');
+                            }),
+                        PopupMenuItem(
+                          child: Text("Profile"),
+                          value: 3,
+                          // onTap: () => Navigator.pushNamed(context, '/profile'),
+                        ),
+                      ]),
+            ],
             bottom: PreferredSize(
               preferredSize:
                   Size.fromHeight(60.0), // You can adjust this value as needed
