@@ -4,6 +4,7 @@ import 'package:foodapp/models/cart.model.dart';
 import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/utils/colors.dart';
+import 'package:foodapp/widgets/PopupMenu.dart';
 import 'package:foodapp/widgets/Title.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
@@ -30,6 +31,8 @@ class _MyCartPageState extends State<MyCartPage> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           title: myTitle(context, totalQuantity: totalQuantity),
+          // -- handle add menu icon
+          actions: [MyPopUpMenu(context)],
           // backgroundColor: AppColors.backgroundWhite,
         ),
         body: SingleChildScrollView(

@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/utils/colors.dart';
 
 Widget myTitle(BuildContext context, {totalQuantity}) {
+  var auth = FirebaseAuth.instance.currentUser?.displayName;
+
   return Container(
-    color: AppColors.colorError,
+    // color: AppColors.colorError,
     width: double.infinity,
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // IconButton(
         //   icon: const Icon(Icons.menu, color: Colors.white),
@@ -15,6 +19,7 @@ Widget myTitle(BuildContext context, {totalQuantity}) {
         //     Navigator.pushNamed(context, '/wishlist');
         //   },
         // ),
+        Text(auth as String, style: TextStyle(color: Colors.white)),
         CircleAvatar(
           radius: 20,
           backgroundColor: Colors.white,

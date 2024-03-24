@@ -10,6 +10,7 @@ import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 import 'package:foodapp/services/database_service.dart';
+import 'package:foodapp/widgets/PopupMenu.dart';
 import 'package:foodapp/widgets/Title.dart';
 import 'package:foodapp/widgets/productDialog.dart';
 import 'package:path/path.dart';
@@ -91,33 +92,8 @@ class _WelcomePagesState extends State<WelcomePage> {
             pinned: true,
             centerTitle: false,
             title: myTitle(context, totalQuantity: totalQuantity),
-            actions: [
-              PopupMenuButton(
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: Text("Home"),
-                          value: 1,
-                          onTap: () {
-                            Navigator.pushNamed(context, '/home');
-                          },
-                        ),
-                        PopupMenuItem(
-                            child: Text("Logout"),
-                            value: 2,
-                            onTap: () async {
-                              FirebaseAuthenticationService
-                                  firebaseAuthenticationService =
-                                  FirebaseAuthenticationService();
-                              await firebaseAuthenticationService.signOut();
-                              Navigator.pushNamed(context, '/home');
-                            }),
-                        PopupMenuItem(
-                          child: Text("Profile"),
-                          value: 3,
-                          // onTap: () => Navigator.pushNamed(context, '/profile'),
-                        ),
-                      ]),
-            ],
+            // -- handle add menu icon
+            actions: [MyPopUpMenu(context)],
             bottom: PreferredSize(
               preferredSize:
                   Size.fromHeight(60.0), // You can adjust this value as needed

@@ -148,6 +148,7 @@ import 'package:foodapp/models/category.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/services/database_service.dart';
+import 'package:foodapp/widgets/PopupMenu.dart';
 import 'package:foodapp/widgets/SidebarmenuDrawer.dart';
 import 'package:foodapp/widgets/Title.dart';
 import 'package:provider/provider.dart';
@@ -302,6 +303,8 @@ class _MainpageCategoryScreenState extends State<MainpageCategoryScreen> {
               pinned: true,
               centerTitle: false,
               title: myTitle(context, totalQuantity: totalQuantity),
+              // -- handle add menu icon
+              actions: [MyPopUpMenu(context)],
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(
                     60.0), // You can adjust this value as needed
