@@ -202,7 +202,7 @@ class CategoryCard extends StatelessWidget {
               onTap: () {
                 // print("Tapped on ${category.name}");
                 Navigator.pushNamed(context, '/welcomepage',
-                    arguments: {'id': category.id, 'name': category.name});
+                    arguments: {'id': category.id, 'name': category?.name});
               },
               child: Container(
                 child: Column(
@@ -217,7 +217,7 @@ class CategoryCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      category.name,
+                      category.name ?? '',
                       style: TextStyle(
                         color: AppColors.textPrimarycolor,
                         fontSize: 18,

@@ -46,8 +46,8 @@ class _MySignupPageState extends State<MySignupPage> {
       loading = true;
     });
 
-    User? user =
-        await _auth.signUpWithEmailAndPassword(email, password, username);
+    User? user = await _auth.signUpWithEmailAndPassword(
+        email, password, username, context);
     if (user != null) {
       loading = false;
       print('User created');

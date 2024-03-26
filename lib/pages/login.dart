@@ -27,14 +27,25 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = true;
     });
-
-    User? user = await _auth.signInWithEmailAndPassword(email, password);
-    if (user != null) {
-      loading = false;
-      Navigator.popAndPushNamed(context, '/home');
-    } else {
-      loading = false;
-      Navigator.popAndPushNamed(context, '/signup');
+    try {
+      User? user =
+          await _auth.signInWithEmailAndPassword(email, password, context);
+      if (user != null) {
+        setState(() {
+          loading = false;
+        });
+        Navigator.popAndPushNamed(context, '/home');
+      } else {
+        setState(() {
+          loading = false;
+        });
+        // Navigator.popAndPushNamed(context, '/signup');
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        loading = false;
+      });
+      print("error on login ${e.code} ");
     }
   }
 
@@ -147,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(height: 10),
                             MyElevatedButton(context, 50.0, 'sign up', () {
                               Navigator.pushNamed(context, '/signup');
-                            }, loading),
+                            }, false),
                           ]),
                         )
                       ],

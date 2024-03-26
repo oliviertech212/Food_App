@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:foodapp/dialogs/authdialog.dart';
 import 'package:foodapp/pages/login.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 
@@ -39,8 +40,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 "If you haven't received the email, press the button below"),
             const Padding(padding: EdgeInsets.all(30)),
             MyElevatedButton(context, 40.0, "Verify Email", () async {
-              final user = FirebaseAuth.instance.currentUser;
-              user?.sendEmailVerification();
+              try {
+                final user = FirebaseAuth.instance.currentUser;
+                user?.sendEmailVerification();
+              } on FirebaseAuthException catch (e) {
+                ErrorDialog(e.code, context);
+              }
               //    print(user);
             }, loading),
             SizedBox(height: 20),
