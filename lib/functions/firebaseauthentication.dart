@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:foodapp/dialogs/authdialog.dart';
 import 'package:foodapp/firebase_options.dart';
+import 'package:path/path.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -11,25 +14,21 @@ class FirebaseAuthenticationService {
   }
 
   Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
+      ErrorDialog(e.code, context);
     } catch (e) {
-      print("error occured during sign in: $e");
+      ErrorDialog(e.toString(), context);
     }
   }
 
-  Future<User?> signUpWithEmailAndPassword(
-      String email, String password, String username) async {
+  Future<User?> signUpWithEmailAndPassword(String email, String password,
+      String username, BuildContext context) async {
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -42,13 +41,9 @@ class FirebaseAuthenticationService {
         // User? updatedUser = _auth.currentUser;
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
+      ErrorDialog(e.code, context);
     } catch (e) {
-      print("error occured during sign up: $e");
+      ErrorDialog(e.toString(), context);
     }
   }
 
