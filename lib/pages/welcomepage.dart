@@ -428,7 +428,7 @@ class _WelcomePagesState extends State<WelcomePage> {
                                               'Price: ${product?.price} Rwf ',
                                               style: TextStyle(
                                                 fontSize: 14,
-                                                // fontWeight,
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.green,
                                               ),
                                             ),

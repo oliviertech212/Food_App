@@ -12,7 +12,9 @@ class CartProvider extends ChangeNotifier {
   // UnmodifiableListView<> get items => UnmodifiableListView(_items);
 
   /// The current total price of all items (assuming all items cost $42).
-  int get totalPrice => _items.length * 42;
+
+  int get totalPrice => _items.fold(
+      0, (total, item) => total + (int.parse(item.price) * item.quantity));
   int get items => _items.fold(0, (value, element) => value + element.quantity);
   get allItems => _items;
 
