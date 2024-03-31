@@ -21,9 +21,9 @@ class FirebaseAuthenticationService {
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      ErrorDialog(e.code, context);
+      await ErrorDialog(e.code, context);
     } catch (e) {
-      ErrorDialog(e.toString(), context);
+      await ErrorDialog(e.toString(), context);
     }
   }
 
@@ -41,9 +41,10 @@ class FirebaseAuthenticationService {
         // User? updatedUser = _auth.currentUser;
       }
     } on FirebaseAuthException catch (e) {
-      ErrorDialog(e.code, context);
+      print("something went wrongn on signup${e.code}");
+      await ErrorDialog(e.code, context);
     } catch (e) {
-      ErrorDialog(e.toString(), context);
+      await ErrorDialog(e.toString(), context);
     }
   }
 

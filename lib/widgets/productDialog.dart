@@ -74,7 +74,7 @@ void MySingleProductDialog(BuildContext context, Product product) {
                         Padding(
                           padding: const EdgeInsets.all(0.0),
                           child: Container(
-                            width: 100,
+                            width: 150,
                             child: Consumer<CartProvider>(
                               builder: (context, cartProvider, child) => Row(
                                 mainAxisAlignment:

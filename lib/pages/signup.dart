@@ -46,16 +46,29 @@ class _MySignupPageState extends State<MySignupPage> {
       loading = true;
     });
 
-    User? user = await _auth.signUpWithEmailAndPassword(
-        email, password, username, context);
-    if (user != null) {
-      loading = false;
-      print('User created');
-      Navigator.pushNamed(context, '/verification');
-    } else {
-      loading = false;
-      print('User not created');
-      Navigator.pushNamed(context, '/signup');
+    try {
+      User? user = await _auth.signUpWithEmailAndPassword(
+          email, password, username, context);
+      if (user != null) {
+        loading = false;
+        setState(() {
+          loading = false;
+        });
+
+        print('User created');
+        Navigator.pushNamed(context, '/verification');
+      } else {
+        setState(() {
+          loading = false;
+        });
+
+        print('User not created');
+        Navigator.pushNamed(context, '/signup');
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        loading = false;
+      });
     }
   }
 

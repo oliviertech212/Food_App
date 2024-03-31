@@ -4,6 +4,7 @@ import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/services/stateMngt/wishlist.provider.dart';
 import 'package:foodapp/utils/colors.dart';
+import 'package:foodapp/widgets/PopupMenu.dart';
 import 'package:foodapp/widgets/Title.dart';
 import 'package:provider/provider.dart';
 
@@ -21,11 +22,17 @@ class _WishlistPageState extends State<WishlistPage> {
     int totalWishlistItems = wishlistItems.items;
     List<Product> allItems = wishlistItems.allItems;
 
+    //  --access app cart state
+    var cartData = context.watch<CartProvider>();
+    int totalQuantity = cartData.items;
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: myTitle(context, totalQuantity: totalWishlistItems),
+        title: myTitle(context, totalQuantity: totalQuantity),
+        // -- handle add menu icon
+        actions: [MyPopUpMenu(context)],
       ),
       body: SingleChildScrollView(
         child: Container(
