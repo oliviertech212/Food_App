@@ -22,7 +22,7 @@ Future ErrorDialog(String errorCode, BuildContext context) {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text("OK",
+                child: const Text("Close",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
