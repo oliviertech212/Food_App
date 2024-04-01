@@ -124,16 +124,16 @@ class _WishlistPageState extends State<WishlistPage> {
                                   color: Colors.green), // font size
                             ),
                           ),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Buy Now',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.backgroundWhite,
-                                    fontSize: 16),
-                              ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/cart');
+                            },
+                            child: Text(
+                              'Buy Now',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.backgroundWhite,
+                                  fontSize: 16),
                             ),
                           )
                         ],
@@ -159,7 +159,7 @@ class _WishlistPageState extends State<WishlistPage> {
                 },
                 icon: const Icon(Icons.favorite_border_outlined),
               ),
-              label: '',
+              label: 'Wishlist',
             ),
             BottomNavigationBarItem(
               icon: IconButton(
@@ -168,7 +168,7 @@ class _WishlistPageState extends State<WishlistPage> {
                 },
                 icon: const Icon(Icons.home_outlined),
               ),
-              label: '',
+              label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: IconButton(
@@ -177,7 +177,7 @@ class _WishlistPageState extends State<WishlistPage> {
                 },
                 icon: const Icon(Icons.person_outline),
               ),
-              label: '',
+              label: 'Profile',
             ),
             // BottomNavigationBarItem(
             //   icon: IconButton(
