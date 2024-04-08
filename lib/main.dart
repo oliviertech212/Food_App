@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/functions/firebaseauthentication.dart';
+import 'package:foodapp/functions/firestoreOrders.dart';
 import 'package:foodapp/pages/cart.screen.dart';
 import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
 import 'package:foodapp/pages/mainpage.category.dart';
+import 'package:foodapp/pages/order.screen.dart';
 import 'package:foodapp/pages/welcome_screen.dart';
 import 'package:foodapp/pages/welcomepage.dart';
 import 'package:foodapp/services/database_service.dart';
@@ -50,6 +53,12 @@ Future<void> main() async {
     final databaseService = DatabaseService();
     await databaseService.initialize();
     await databaseService.getDatabaseVersion();
+
+    // cache firestore
+    // FirebaseFirestore.instance.settings =
+    //     const Settings(persistenceEnabled: true);
+
+    // await getOrders();
 
     FirebaseAuthenticationService firebaseAuthenticationService =
         FirebaseAuthenticationService();
@@ -107,6 +116,7 @@ class _FoodAppState extends State<FoodApp> {
         '/welcomepage': (context) => const WelcomePage(),
         '/cart': (context) => const MyCartPage(),
         '/wishlist': (context) => WishlistPage(),
+        '/orders': (context) => const OrdersPage(),
       },
     );
   }
