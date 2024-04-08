@@ -179,14 +179,14 @@ class _WishlistPageState extends State<WishlistPage> {
               ),
               label: 'Profile',
             ),
-            // BottomNavigationBarItem(
-            //   icon: IconButton(
-            //       onPressed: () {
-            //         Navigator.pushNamed(context, '/cart');
-            //       },
-            //       icon: const Icon(Icons.shopping_basket_outlined)),
-            //   label: '',
-            // )
+            BottomNavigationBarItem(
+              icon: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/orders');
+                  },
+                  icon: const Icon(Icons.shopping_basket_outlined)),
+              label: 'Orders',
+            )
           ],
         ),
       ),
