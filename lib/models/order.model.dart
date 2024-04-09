@@ -5,7 +5,7 @@ class Orders {
   final String userId;
   final List<OrderItem> products;
   final Timestamp createdAt;
-  final DocumentReference status;
+  final int status;
 
   Orders({
     required this.orderId,
@@ -18,6 +18,16 @@ class Orders {
   double get total {
     return products.fold(
         0, (total, current) => total + current.price * current.quantity);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'orderId': orderId,
+      'userId': userId,
+      'products': products.map((product) => product.toMap()).toList(),
+      'createdAt': createdAt,
+      'status': status,
+    };
   }
 }
 
@@ -33,4 +43,13 @@ class OrderItem {
     required this.quantity,
     required this.price,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'productId': productId,
+      'pname': pname,
+      'quantity': quantity,
+      'price': price,
+    };
+  }
 }

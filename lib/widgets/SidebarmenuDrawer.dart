@@ -53,6 +53,25 @@ Widget MySideBarMenu(BuildContext context) {
               },
             ),
             Divider(color: AppColors.textWhitecolor, endIndent: 16, indent: 16),
+            // orders
+            ListTile(
+              title: Text(
+                'Orders',
+                style: TextStyle(
+                  color: AppColors.textWhitecolor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ).copyWith(
+                  fontFamily: 'Roboto',
+                ),
+              ),
+              // selected: _selectedIndex == 0,
+              onTap: () {
+                Navigator.pushNamed(context, '/orders');
+              },
+            ),
+
+            Divider(color: AppColors.textWhitecolor, endIndent: 16, indent: 16),
             ListTile(
               title: Text(
                 'Cart',
@@ -103,6 +122,7 @@ Widget MySideBarMenu(BuildContext context) {
                 Navigator.pushNamed(context, '/new-password');
               },
             ),
+
             Divider(color: AppColors.textWhitecolor, endIndent: 16, indent: 16),
 
             ListTile(
