@@ -22,12 +22,14 @@ Future<void> createOrder(List<CartItem> cartItems) async {
               'productId': item.id,
               'quantity': item.quantity,
               'Pname': item.name,
-              'price': item.price
+              'price': int.parse(item.price),
             })
         .toList(),
     'timestamp': Timestamp.now(),
     'status': 1
   };
+
+  print("orderData $orderData");
 
   await FirebaseFirestore.instance
       .collection('wedeliver')
@@ -62,7 +64,7 @@ Future<List<Orders>> getOrders() async {
               ))
           .toList(),
       createdAt: data['timestamp'],
-      status: data['status'],
+      status: data['status'], // This should now work
     );
   }).toList();
 }

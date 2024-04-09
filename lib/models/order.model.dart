@@ -32,10 +32,10 @@ class Orders {
 }
 
 class OrderItem {
-  final String productId;
+  final int productId;
   final String pname;
   final int quantity;
-  final double price;
+  final int price;
 
   OrderItem({
     required this.productId,
