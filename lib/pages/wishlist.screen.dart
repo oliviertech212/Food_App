@@ -149,8 +149,9 @@ class _WishlistPageState extends State<WishlistPage> {
       bottomNavigationBar: SizedBox(
         child: BottomNavigationBar(
           elevation: 8.0,
-          selectedItemColor: AppColors.bgprimaryColor,
-          backgroundColor: AppColors.bgSecondary,
+          selectedItemColor: AppColors.colorError,
+          // backgroundColor: AppColors.bgSecondary,
+          backgroundColor: Theme.of(context).primaryColor,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: IconButton(
@@ -179,14 +180,14 @@ class _WishlistPageState extends State<WishlistPage> {
               ),
               label: 'Profile',
             ),
-            BottomNavigationBarItem(
-              icon: IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/orders');
-                  },
-                  icon: const Icon(Icons.shopping_basket_outlined)),
-              label: 'Orders',
-            )
+            // BottomNavigationBarItem(
+            //   icon: IconButton(
+            //       onPressed: () {
+            //         Navigator.pushNamed(context, '/orders');
+            //       },
+            //       icon: const Icon(Icons.shopping_basket_outlined)),
+            //   label: 'Orders',
+            // )
           ],
         ),
       ),

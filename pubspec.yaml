@@ -46,6 +46,7 @@ dependencies:
   provider: ^6.1.2
   collection: ^1.15.0
   intl: any
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:
