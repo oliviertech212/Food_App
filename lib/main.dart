@@ -1,38 +1,31 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:foodapp/functions/firebaseauthentication.dart';
-import 'package:foodapp/functions/firestoreOrders.dart';
 import 'package:foodapp/pages/cart.screen.dart';
+import 'package:foodapp/pages/checkout_screen.dart';
+import 'package:foodapp/pages/forgot_password.dart';
 import 'package:foodapp/pages/home.dart';
 import 'package:foodapp/pages/login.dart';
 import 'package:foodapp/pages/mainpage.category.dart';
+import 'package:foodapp/pages/new_password.dart';
 import 'package:foodapp/pages/order.screen.dart';
+import 'package:foodapp/pages/signup.dart';
+import 'package:foodapp/pages/verification.dart';
+import 'package:foodapp/pages/verifyemail.dart';
 import 'package:foodapp/pages/welcome_screen.dart';
 import 'package:foodapp/pages/welcomepage.dart';
+import 'package:foodapp/pages/wishlist.screen.dart';
 import 'package:foodapp/services/database_service.dart';
-import 'package:foodapp/pages/verifyemail.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/services/stateMngt/wishlist.provider.dart';
 import 'package:foodapp/utils/theme.dart';
-import 'package:foodapp/pages/signup.dart';
-import 'package:foodapp/pages/forgot_password.dart';
-import 'package:foodapp/pages/verification.dart';
-import 'package:foodapp/pages/new_password.dart';
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:foodapp/pages/welcomepage.dart';
-import 'package:provider/provider.dart';
-import 'package:foodapp/pages/wishlist.screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
@@ -117,6 +110,7 @@ class _FoodAppState extends State<FoodApp> {
         '/cart': (context) => const MyCartPage(),
         '/wishlist': (context) => WishlistPage(),
         '/orders': (context) => const OrdersPage(),
+        '/checkout_screen': (context) => const CheckoutPage(),
       },
     );
   }

@@ -1,19 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:foodapp/functions/firebaseauthentication.dart';
 import 'package:foodapp/models/cart.model.dart';
+import 'package:foodapp/models/products.model.dart';
+import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/services/stateMngt/wishlist.provider.dart';
 import 'package:foodapp/utils/colors.dart';
-import 'package:foodapp/models/products.model.dart';
-import 'package:foodapp/widgets/ElevatedButton.dart';
-import 'package:foodapp/services/database_service.dart';
 import 'package:foodapp/widgets/PopupMenu.dart';
 import 'package:foodapp/widgets/Title.dart';
 import 'package:foodapp/widgets/productDialog.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -35,6 +29,7 @@ class _WelcomePagesState extends State<WelcomePage> {
   void initState() {
     super.initState();
     table.initialize().then((_) => fetchProducts());
+    futureProduct = table.getAllproduct();
   }
 
   void fetchProducts() async {

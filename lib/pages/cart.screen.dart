@@ -1,15 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/functions/firestoreOrders.dart';
 import 'package:foodapp/models/cart.model.dart';
-import 'package:foodapp/models/products.model.dart';
 import 'package:foodapp/services/stateMngt/cart.provider.dart';
 import 'package:foodapp/utils/colors.dart';
 import 'package:foodapp/widgets/ElevatedButton.dart';
 import 'package:foodapp/widgets/PopupMenu.dart';
 import 'package:foodapp/widgets/Title.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 class MyCartPage extends StatefulWidget {
   const MyCartPage({super.key});
@@ -143,6 +140,7 @@ class _MyCartPageState extends State<MyCartPage> {
                 onPressed: () async {},
                 child: MyElevatedButton(context, 40.0, "Checkout", () async {
                   await createOrder(allItems);
+                  Navigator.pushNamed(context, '/checkout_screen');
                 }, false),
               ),
             ),
