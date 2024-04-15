@@ -137,12 +137,11 @@ class _MyCartPageState extends State<MyCartPage> {
                 Navigator.pushNamed(context, '/');
               },
               icon: TextButton(
-                onPressed: () async {
-                },
+                onPressed: () async {},
                 child: MyElevatedButton(context, 40.0, "Checkout", () async {
                   await createOrder(allItems);
                   Navigator.pushNamed(context, '/checkout_screen');
-                }, true),
+                }, false),
               ),
             ),
             label: '',
